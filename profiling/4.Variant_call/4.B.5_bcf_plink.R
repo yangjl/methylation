@@ -18,19 +18,28 @@ cmd1 <- "cd largedata/gatk_vcf "
 #"-e 'CHROM ~ \"UNKNOWN\" | CHROM ~ \"mitochondrion\" | CHROM ~ \"chloroplast\" '",
 cmd2 <- paste("bcftools annotate --set-id +'%CHROM\\_%POS'", 
               "JRI20_joint_call.filtered_snps.bcf",
-              "-Ob -o JRI20_filtered_snps_annot.bcf")
+              "-Ob -o JRI20_filtered_snps_annot.bcf.gz")
+#cmd3 <- "bgzip JRI20_filtered_snps_annot.bcf -@ 8"
+cmd3 <- "tabix JRI20_filtered_snps_annot.bcf.gz"
 
 set_farm_job(slurmsh = "slurm-script/bcf_annot.sh",
+             shcode = c(cmd1, cmd2, cmd3), wd = NULL, jobid = "bcf",
+             email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "8"))
+
+
+### convert to PLINK
+cmd1 <- "cd largedata/gatk_vcf"
+cmd2 <- paste("plink -bcf JRI20_filtered_snps_annot.bcf.gz --keep-allele-order --make-bed --out JRI20", 
+              "--allow-extra-chr --freq --missing --het --ibc")
+set_farm_job(slurmsh = "slurm-script/bcf2plink.sh",
              shcode = c(cmd1, cmd2), wd = NULL, jobid = "bcf",
              email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "8"))
 
 
-
-
-### MAF and Missingness
+### calculate other things
 
 cmd1 <- "cd largedata/gatk_vcf"
-cmd2 <- "plink --bfile JRI20 --allow-extra-chr --out JRI20_stat --freq counts --missing --het --ibc"
+cmd2 <- "plink --bfile JRI20 --threads 6 --allow-extra-chr --out JRI20 --genome --homozyg"
 
 set_farm_job(slurmsh = "slurm-script/plink_stat.sh",
              shcode = c(cmd1, cmd2), wd = NULL, jobid = "pstat",
@@ -39,17 +48,25 @@ set_farm_job(slurmsh = "slurm-script/plink_stat.sh",
 ### plot
 library(data.table)
 
-frq <- fread("largedata/gatk_vcf/JRI20_stat.frq.counts")
+miss <- fread("largedata/gatk_vcf/JRI20.lmiss")
+frq <- fread("largedata/gatk_vcf/JRI20.frq")
 #G0	Missing genotype count (so C1 + C2 + 2 * G0 is constant on autosomal variants)
 
-frq$missing <- round(frq$G0/20, 3)
-frq$maf <- round(frq$C1/frq$C2, 3)
-
-pdf("graphs/teo20_miss_maf.pdf", height=6, width=10)
+pdf("graphs/teo20_miss_maf.pdf", height=5, width=10)
 par(mfrow=c(1, 2))
-hist(frq$missing, breaks=100, main="Missing rate (N=20)", xlab="missing", col="#cdaa7d")
-hist(frq$maf, breaks=100, main="Minor allele frq (N=20)", xlab="frq", col="#cdaa7d")
+hist(miss$F_MISS, main="Missing rate (N=20)", xlab="missing", col="#cdaa7d")
+hist(frq$MAF, main="SFS (N=20)", xlab="Non-ref allele frq", col="#cdaa7d")
 dev.off()
 
 
+### inbreeding
+# small sample, inaccurate!
+# F coefficient estimates (i.e. ([observed hom. count] - [expected count]) / ([total observations] - [expected count]))
+het <- read.table("largedata/gatk_vcf/JRI20_stat.het", header=T)
+ibc <- read.table("largedata/gatk_vcf/JRI20_stat.ibc", header=T)
+
+
+
+##
+cmd <- "bcftools roh JRI20_filtered_snps_annot.bcf.gz"
 
