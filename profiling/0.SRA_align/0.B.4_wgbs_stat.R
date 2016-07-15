@@ -1,6 +1,5 @@
 ### Jinliang Yang
-
-
+### July 15th, 2016
 
 files <- list.files(path = "/group/jrigrp4/BS_teo20/WGBS/", pattern = "report.txt", full.names = TRUE)
 features <- c("Sequence pairs analysed in total:\t",
@@ -32,7 +31,7 @@ res$chg <- with(res, round(mCHG/(mCHG+unCHG), 3))
 res$chh <- with(res, round(mCHH/(mCG+unCHH), 3))
 res$seqid <- gsub(".*/|_PE_.*", "", files) 
 
-
+write.table(res, "cache/maize_bismap_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
 
