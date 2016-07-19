@@ -45,8 +45,8 @@ plot_mht(res = res, cex = 0.9, pch = 16, col = rep(c("slateblue","cyan4"), 5),
 ### identify Beagle IBD
 shcode = c("module load java", 
            "cd largedata/gatk_vcf/",
-           "java -Xmx32g -jar ~/bin/beagle.22Feb16.8ef.jar gt=JRI20_filtered_snps_annot.vcf.gz ibd=true out=JRI20_snp")
+           "java -Xmx60g -jar ~/bin/beagle.22Feb16.8ef.jar gt=JRI20_filtered_snps_annot.vcf.gz ibd=true out=JRI20_snp")
 set_array_job(shid = "slurm-script/run_beagle.sh",
               shcode = shcode, arrayjobs = "1", wd = NULL,
-              jobid = "beagle", email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "8"))
+              jobid = "getibd", email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "8"))
 
