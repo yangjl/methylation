@@ -10,17 +10,18 @@ set_farm_job(slurmsh = "slurm-script/plink_stat.sh",
              shcode = c(cmd1, cmd2), wd = NULL, jobid = "pstat",
              email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "16"))
 
-## ROH
+## ROH: detected no runs of homozygocity
 cmd <- "bcftools roh JRI20_filtered_snps_annot.bcf.gz"
+cmd <- "plink --bfile JRI20_snp --threads 4 --allow-extra-chr --maf 0.05 --homozyg-snp 50 --homozyg-kb 500 --out JRI20_snp"
 
 
 ### inbreeding
 # small sample, inaccurate!
 # F coefficient estimates (i.e. ([observed hom. count] - [expected count]) / ([total observations] - [expected count]))
-het <- read.table("largedata/gatk_vcf/JRI20_stat.het", header=T)
-ibc <- read.table("largedata/gatk_vcf/JRI20_stat.ibc", header=T)
+het <- read.table("largedata/gatk_vcf/JRI20_snp.het", header=T)
+ibc <- read.table("largedata/gatk_vcf/JRI20_snp.ibc", header=T)
 
-## Handy
+### Handy
 
 cmd <- "plink --bfile JRI20_snp --threads 6 --allow-extra-chr --out JRI20_snp --hardy midp"
 
@@ -39,4 +40,13 @@ res$pos <- as.numeric(as.character(gsub(".*_", "", res$SNP)))
 
 plot_mht(res = res, cex = 0.9, pch = 16, col = rep(c("slateblue","cyan4"), 5), 
          GAP = 5e+06, yaxis = NULL, col2plot = "log10p")
+
+
+### identify Beagle IBD
+shcode = c("module load java", 
+           "cd largedata/gatk_vcf/",
+           "java -Xmx32g -jar ~/bin/beagle.22Feb16.8ef.jar gt=JRI20_filtered_snps_annot.vcf.gz ibd=true out=JRI20_snp")
+set_array_job(shid = "slurm-script/run_beagle.sh",
+              shcode = shcode, arrayjobs = "1", wd = NULL,
+              jobid = "beagle", email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", "8"))
 

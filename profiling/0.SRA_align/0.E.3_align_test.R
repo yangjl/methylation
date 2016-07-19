@@ -24,4 +24,4 @@ inputdf <- data.frame(fq1 = fq1[1], fq2 = fq2[1], outbase = "pg_JRA1")
 run_bismark(inputdf, genome = "/home/jolyang/Documents/Github/methylation/largedata/pgenome",
             outdir = "/home/jolyang/Documents/Github/methylation/largedata/bismark", 
             N = 1, align = TRUE,
-            email = "yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 8))
+            email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", 32))
