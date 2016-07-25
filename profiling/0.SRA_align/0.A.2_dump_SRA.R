@@ -1,8 +1,6 @@
 ### Jinliang Yang
 ### Feb 25th, 2016
 
-
-
 ##########################
 run_fdump <- function(pwd="/group/jrigrp4/BS_teo20/WGBS", slurmsh="slurm-script/dump_WGBS.sh"){
     source("~/Documents/Github/zmSNPtools/Rcodes/setUpslurm.R")

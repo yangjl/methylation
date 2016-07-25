@@ -24,4 +24,4 @@ run_ANGSD(type = "theta", shfile = "slurm-script/run_angsd_theta.sh",
           anc = "$HOME/dbcenter/AGP/AGPv2/Zea_mays.AGPv2.14.dna.toplevel.fa",
           nInd=20, minInd=5,
           email = "yangjl0930@gmail.com",
-          runinfo = c(TRUE, "bigmemh", 16))
+          runinfo = c(TRUE, "bigmemm", 32))
