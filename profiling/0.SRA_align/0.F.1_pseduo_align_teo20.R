@@ -47,19 +47,3 @@ set_array_job(shid="slurm-script/run_pg.sh", shcode=cmd,
               arrayjobs="1-20", wd=NULL, jobid="pgjob", email="yangjl0930@gmail.com",
               run = c(TRUE, "bigmemm", "4"))
 
-########### alignment
-fq1 <- list.files(path="largedata/wgbs_fq", pattern="R1.fastq.gz$", full.names = TRUE)
-fq2 <- list.files(path="largedata/wgbs_fq", pattern="R2.fastq.gz$", full.names = TRUE)
-
-#bamfiles <- list.files(path="/group/jrigrp4/BS_teo20/WGBS/BSM", pattern="bam$", full.names = TRUE)
-### note: for alignment, "bam" col should not be present.
-inputdf <- data.frame(fq1 = fq1,  fq2 = fq2, outbase = gsub(".*/|_.*", "", fq1))
-inputdf <- merge(inputdf, idtab[, c("idchar", "pid")], by.x="outbase", by.y="pid")
-inputdf$genome <- paste0("$HOME/Documents/Github/methylation/largedata/wgbs_pgenome/", inputdf$idchar)
-
-### AGPv2
-run_bismark(inputdf, genome = NULL,
-            outdir = "/home/jolyang/Documents/Github/methylation/largedata/wgbs_bismark", 
-            N = 1, align = TRUE,
-            email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", 16))
-
