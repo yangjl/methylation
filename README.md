@@ -1,22 +1,11 @@
 Title: Methylation variations in Zea
 
-# Collaborative Workflow
-
-Jinliang: I suggest we following this [**workflow**](http://www.eqqon.com/index.php/Collaborative_Github_Workflow) for the project. Basically, you need to:
-- **Fork** the repo
-- **Clone** to your own server
-- Do what ever you want in your forked repo, like **add**, **commit**, **push** without worry about the conflict issues
-- Send **pull request** to the master repo **RILAB/GBSMethylation** when you want to share your progress
-- If no conflict, we can just **merge** it. Otherwise, some body have to fix the conflicts
-- Do not forget to **merge** from the updated RILAB master repo to your own fork
-- Suggestion welcomed
 
 # Brain storm
-The md files are located in the folder `example_ideaKC/`
-- [Kate's](example_ideaKC/KC_ideas.md)
-- [Jinliang's](example_ideaKC/Jinliang.md)
-- [Simon's]()
-
+The md files are located in the folder `ideas/`:
+- [Kate's](ideas/KC_ideas.md)
+- [Jinliang's](ideas/Jinliang.md)
+- [Simon's](ideas/simon.md)
 
 # Data:
 
