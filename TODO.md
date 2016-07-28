@@ -2,3 +2,10 @@
 2. identify DMR
 3. correlate DMR with genomic features
 4. Whether selection sweeps associated with differential methylation patterns: see new Tajima's D-like statistic
+
+
+
+
+## QC report of WGBS
+
+[]()

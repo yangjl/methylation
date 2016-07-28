@@ -14,6 +14,8 @@ The md files are located in the folder `ideas/`:
   	- GBS on ~100 progenies from each plant, all 100 phenotyped for multiple traits
   	- should be able to impute whole genome for progeny 
 	- plants are from Palmar Chico. For more info on this population, see e.g. [our paper on fine-scale genetic stcuture](http://www.rilab.org/pdfs/Van-Heerwaarden-et-al-2010-951.pdf)
+	
+	
 4. Bisulfite sequecing of ~20 addditional maize/teosinte  
 	- TIL1 and TIL11 (unsure about access permission)
 	- ~20 maize lines, including Oh43, Mo17, W22, and a diverse set of inbreds
