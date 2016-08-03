@@ -17,7 +17,6 @@ res <- get_qc(files, genomesize=2500000000)
 write.table(res, "cache/wgbs_teo20_fastq_qc.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 ### plot results
-
 res <- read.csv("cache/wgbs_teo20_fastq_qc.csv")
 
 idx <- seq(from=1, to =40, by=2)
@@ -28,5 +27,13 @@ dp$file <- gsub(".*fastq/|_.*", "", dp$file)
 par(mfrow=c(1,2))
 barplot(dp$avgQ, names.arg=dp$file, col="#bdb76b", las=2, main="Avg Base Quality (N=20)")
 barplot(dp$depth, names.arg=dp$file, col="#698b69", las=2, main="Read Depth (N=20)")
+
+### FastQC file located in reports/wgbs_qc_report
+### preview it
+files <- list.files(path="reports/wgbs_qc_report", pattern="html$", full.names = TRUE)
+
+links <- paste0("http://htmlpreview.github.io/?https://github.com/yangjl/methylation/blob/master/",
+                files)
+
 
 
