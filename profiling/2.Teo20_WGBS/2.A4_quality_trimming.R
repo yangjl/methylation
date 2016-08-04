@@ -36,3 +36,30 @@ res$outpe <- gsub(".*\\)\\:", "", res$outpe)
 res$totout <- gsub(".*\\)\\:", "", res$totout)
 write.table(res, "cache/maize_bismap_trimming_stat.txt", sep="\t", row.names=FALSE, quote=FALSE)
 
+######## methylation
+stat <- read.delim("cache/maize_bismap_trimming_stat.txt", header=TRUE)
+#stat$totpe <- gsub("\\s+|,|\\(.*|bp", "", stat$totpe)
+
+res <- apply(stat[,-1], 2, function(x) gsub("\\s+|,|\\(.*|bp", "",x))
+res <- as.data.frame(apply(res, 2, as.numeric))
+res$files <- gsub("_.*", "", stat$files)
+
+res$aptrimmed <- res$totbp - res$totout - res$qtrimmed
+
+library(ggplot2)
+library(tidyr)
+
+lres <- gather(res[, 6:9], type, reads, c(1,2,4))
+lres <- lres[order(lres$files, lres$type, decreasing = TRUE),]
+
+lres$type <- factor(lres$type, levels = c("aptrimmed", "qtrimmed",  "totout"), 
+                    labels=c("Adapter", "Q<20", "remaning"), ordered=TRUE)
+
+theme_set(theme_grey(base_size = 18)) 
+s <- ggplot(lres, aes(x=files, y=reads, fill = type)) + 
+    #opts(axis.text.x=theme_text(angle=90)) +
+    geom_bar(stat="identity") +
+    labs(x="Fastq files", y="# of bp", fill="Trimming") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12))
+s
+
