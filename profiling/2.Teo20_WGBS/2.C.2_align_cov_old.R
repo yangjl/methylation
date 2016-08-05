@@ -4,14 +4,32 @@
 
 library("data.table")
 
+files <- list.files(path="largedata/wgbs_bismark/", pattern="pe.CX_report.txt", full.names=TRUE)
 
-res <- fread("largedata/wgbs_bismark/JRA2_pe.CX_report.txt")
 
-cg <- res[V6 == "CG"]
-cg$tot <- cg$V4 + cg$V5
+cvg <- dtp <- data.frame()
+for(i in 1:length(files)){
+    res <- fread("largedata/wgbs_bismark/JRA2_pe.CX_report.txt")
+    
+    cg <- res[V6 == "CG"]
+    chg <- res[V6 == "CHG"]
+    chh <- res[V6 == "CHH"]
+    
+    rm(list="res")
+    
+    cg$tot <- cg$V4 + cg$V5
+    chg$tot <- chg$V4 + chg$V5
+    chh$tot <- chh$V4 + chh$V5
+     
+    tem <- data.frame(cg=cg[,sum(tot == 0)]/nrow(cg), 
+                      chg=chg[,sum(tot == 0)]/nrow(chg), 
+                      chh=chh[,sum(tot == 0)]/nrow(chh))
+}
 
-chg <- res[V6 == "CHG"]
-chh <- res[V6 == "CHH"]
+
+
+
+
 
 
 
