@@ -4,6 +4,14 @@
 
 library("data.table")
 
+### check the results
+library("farmeR")
+f1 <- list.files(path="largedata/wgbs_bismark", pattern="PE_report.txt$", full.names=TRUE)
+
+
+res <- get_file2tab(files=f1, features="Mapping efficiency:\t", replace=F)
+
+
 files <- list.files(path="largedata/wgbs_bismark/", pattern="pe.CX_report.txt", full.names=TRUE)
 
 
