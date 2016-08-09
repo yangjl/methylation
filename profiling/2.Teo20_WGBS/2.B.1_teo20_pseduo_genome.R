@@ -17,11 +17,11 @@ idtab$pid <- paste0("JR", idtab$plate)
 for(i in 1:nrow(idtab)){
     shid <- paste0("slurm-script/run_pg", i, ".sh")
     
-    cmd1 <- paste0("mkdir largedata/wgbs_pgenome/", idtab$idchar[i])
-    cmd2 <- paste("bcftools consensus -f $HOME/dbcenter/AGP/AGPv2/Zea_mays.AGPv2.14.dna.toplevel.fa",
+    cmd1 <- paste0("mkdir largedata/wgbs_pgen/", idtab$idchar[i])
+    cmd2 <- paste("bcftools consensus -i -f $HOME/dbcenter/AGP/AGPv2/Zea_mays.AGPv2.14.dna.toplevel.fa",
                  "-s", idtab$idchar[i],
                  "largedata/gatk_vcf/JRI20_filtered_snps_annot.bcf.gz",
-                 paste0("-o largedata/wgbs_pgenome/", idtab$idchar[i], "/", idtab$idchar[i], ".fa"))
+                 paste0("-o largedata/wgbs_pgen/", idtab$idchar[i], "/", idtab$idchar[i], ".fa"))
     cat(c(cmd1, cmd2), file=shid, sep="\n", append=FALSE)
 }
 
@@ -30,7 +30,7 @@ set_array_job(shid="slurm-script/run_pg.sh", shcode="sh slurm-script/run_pg$SLUR
               run = c(TRUE, "bigmemm", "2"))
 
 #####################################################################################################
-# bcftools view -r 1:1-1000 JRI20_filtered_snps_annot.bcf.gz 
+# bcftools view -r 1:1-1000 JRI20_filtered_snps_annot.bcf.gz --samples JRIAL2A
 ### checking results
 "samtools faidx JRIAL2A.fa 1:1-1000"
 # Note: heter=> change to alt, multi=>change to dominant alt, missing=> not change
