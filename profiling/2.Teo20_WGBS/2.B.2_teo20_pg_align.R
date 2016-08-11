@@ -23,7 +23,7 @@ inputdf$genome <- paste0("$HOME/Documents/Github/methylation/largedata/wgbs_pgen
 
 ### AGPv2
 run_bismark(inputdf, genome = NULL,
-            outdir = "/home/jolyang/Documents/Github/methylation/largedata/wgbs_bismark", 
+            outdir = "/home/jolyang/Documents/Github/methylation/largedata/wgbs_align", 
             N = 1, align = TRUE,
             email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", 16))
 
