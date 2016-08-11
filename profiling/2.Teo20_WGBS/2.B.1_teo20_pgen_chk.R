@@ -9,82 +9,28 @@
 
 library("data.table")
 h <- read.table("largedata/gatk_vcf/JRI20_bi_snps_annot.header", header=T)
-snp <- fread("largedata/gatk_vcf/JRI20_bi_snps_annot.txt", nrows=10000)
-names(snp) <- names(h)
+snpdt <- fread("largedata/gatk_vcf/JRI20_bi_snps_annot.txt")
+names(snpdt) <- names(h)
 
 library("Biostrings")
 fa <- readDNAStringSet(filepath = "~/dbcenter/AGP/AGPv2/Zea_mays.AGPv2.14.dna.toplevel.fa", format="fasta")
-bck <- fa
+#bck <- fa
 uniqueLetters(fa)
 #[1] "A" "C" "G" "T" "S" "Y" "N"
-alphabetFrequency(fa)
+# alphabetFrequency(fa)
 # length of each chromosome
 width(fa)
 names(fa)
 
-
-sub_rules <- data.frame(from=c("M", "Y", "R", "K"), to=c("C", "C", "G", "T"))
-
-
-
-sub_bp <- function(dt, ){
-    
-    
-    
-    
-    
-    return(dt)
-}
+####### make pseudo-ref using an R package
+myr <- data.frame(from=c("M", "Y", "R", "K"), to=c("C", "C", "G", "G"))
+out <- pseudoRef(fa, snpdt, sidx=5:ncol(snpdt), arules=myr, outdir="largedata/wgbs_pgen")
+ 
+getsum <- function(x){
+    apply(x, 2, sum)
+}   
+out2 <- sapply(out, getsum)  
+write.table(out2, "cache/pgen_report.csv", sep=",", quote=FALSE)    
 
 
 
-
-
-
-
-### replace bp
-
-chr1
-
-res <- replaceAt(x=fa[13], at=1:10, value="M")
-subseq(fa[13], start=1, end=10)
-
-
-
-
-
-
-
-
-
-
-
-test <- sort(fa)
-### edit genome to remove 
-test <- fa[-1:-3]
-
-
-
-
-letterFrequency(fa, letters="ATCG")
-names(fa)
-
-writeXStringSet()
-
-
-uniqueLetters(fa)
-# "*" "A" "C" "G" "K" "M" "N" "R" "S" "T" "W" "Y"
-
-fa[12] %in% "MM"
-
-subseq, subseq<- extractAt, replaceAt
-
-
-vmatchPattern(pattern="*", fa[4])
-
-
-
-get_bp <- function(pos0=987, chr=12){
-    print(subseq(fa[chr], start=pos0, end=pos0))
-}
-get_bp(pos0=92673)
