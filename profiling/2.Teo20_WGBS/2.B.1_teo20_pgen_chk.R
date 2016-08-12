@@ -23,6 +23,7 @@ width(fa)
 names(fa)
 
 ####### make pseudo-ref using an R package
+library(pseudoRef)
 myr <- data.frame(from=c("M", "Y", "R", "K"), to=c("C", "C", "G", "G"))
 out <- pseudoRef(fa, snpdt, sidx=5:ncol(snpdt), arules=myr, outdir="largedata/wgbs_pgen")
  
@@ -32,5 +33,18 @@ getsum <- function(x){
 out2 <- sapply(out, getsum)  
 write.table(out2, "cache/pgen_report.csv", sep=",", quote=FALSE)    
 
+
+####### make pseudo-ref IUPAC
+out <- pseudoRef(fa, snpdt, sidx=5:ncol(snpdt), arules=NULL, 
+                 outdir="/group/jrigrp7/jyang/methylation/largedata/pgen")
+
+geneid <- read.table("/home/jolyang/dbcenter/AGP/AGPv2/ZmB73_5b_FGS_info.txt", header=T)
+#geneid <- subset(geneid, is_canonical == "yes")
+
+g <- c("GRMZM2G161472","GRMZM2G067591", "GRMZM2G081554","GRMZM2G044481","GRMZM2G068808",
+       "AC218998.2FG011","GRMZM2G391312","AC214360.3FG001","GRMZM2G093603","GRMZM2G016922",
+       "GRMZM2G093526","GRMZM2G028306","GRMZM2G127087")
+
+gid <- subset(geneid, gene_id %in% g)
 
 
