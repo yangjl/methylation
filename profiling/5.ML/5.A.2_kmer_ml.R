@@ -47,6 +47,7 @@ tb$kmer <- nchar(as.character(tb$na))
 ### train binomial model
 #mfit <- glmnet(x= as.matrix(df[, idx]), y=df$mb, family = "binomial")
 idx <- 5+which(tb$kmer[-1:-5] <= 3)
+
 cvfit = cv.glmnet(x= as.matrix(df[, idx]), y=df$mb, family = "binomial", type.measure = "class", parallel=FALSE)
 cvfit$lambda.min
 head(sort(coef(cvfit, s = "lambda.min")))
@@ -55,10 +56,13 @@ save(file="largedata/cvfit.RData", list="cvfit")
 #res <- coef(cvfit, s = "lambda.min")
 
 
-ob <- load("largedata/cvfit.RData")
-res <- as.matrix(coef(cvfit, s = "lambda.min"))
+### train binomial model
+#mfit <- glmnet(x= as.matrix(df[, idx]), y=df$mb, family = "binomial")
+idx3 <- 5+which(tb$kmer[-1:-5] == 3)
 
-head(res[order(res[,1]),], 30)
+cvfit3 = cv.glmnet(x= as.matrix(df[, idx3]), y=df$mb, family = "binomial", type.measure = "class", parallel=FALSE)
+cvfit3$lambda.min
+head(sort(coef(cvfit3, s = "lambda.min")))
 
-print(cvfit)
-plot(cvfit)
+save(file="largedata/cvfit3.RData", list="cvfit3")
+#res <- coef(cvfit, s = "lambda.min")
