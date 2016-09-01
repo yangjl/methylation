@@ -3,7 +3,7 @@
 
 library(farmeR)
 
-files <- list.files(path = "largedata/bismark", pattern = "PE_report.txt", full.names = TRUE)
+files <- list.files(path = "largedata/wgbs_align", pattern = "PE_report.txt", full.names = TRUE)
 features <- c("Sequence pairs analysed in total:\t",
               "Number of paired-end alignments with a unique best hit:\t",
               "Sequence pairs with no alignments under any condition:\t",
@@ -33,11 +33,11 @@ res$chg <- with(res, round(mCHG/(mCHG+unCHG), 3))
 res$chh <- with(res, round(mCHH/(mCG+unCHH), 3))
 res$seqid <- gsub(".*/|_PE_.*", "", files) 
 
-write.table(res, "cache/comp3_bismap_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(res, "cache/pg20_bismap_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 ######### Plot
 
-comp <- read.csv("cache/comp3_bismap_stat.csv")
+comp3 <- read.csv("cache/comp3_bismap_stat.csv")
 
 library(ggplot2)
 library(tidyr)
@@ -54,7 +54,7 @@ s <- ggplot(lres, aes(x=seqid, y=reads, fill = type)) +
     #opts(axis.text.x=theme_text(angle=90)) +
     geom_bar(stat="identity", position="dodge") +
     labs(x="", y="Mapping Rate", fill="Type") +
-    scale_x_discrete(labels=c("B73", "B73 -> N", "B73 -> pseduoRef"))
+    scale_x_discrete(labels=c("B73", "B73 <- N", "B73 <- VCF"))
     #theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12)
     #theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12))
 s
