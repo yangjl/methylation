@@ -43,10 +43,3 @@ for(i in 1:length(files)){
 set_array_job(shid="slurm-script/runmv.sh", shcode="sh slurm-script/runmv_$SLURM_ARRAY_TASK_ID.sh",
               arrayjobs= paste0("1-", length(files)), wd=NULL, jobid="mv", 
               email="yangjl0930@gmail.com", run = c(TRUE, "bigmemm", "2"))
-
-
-
-### fq stat
-
-
-
