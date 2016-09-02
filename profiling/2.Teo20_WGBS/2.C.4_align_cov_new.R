@@ -27,9 +27,9 @@ for(i in 1:length(files)){
     chg$tot <- chg$V4 + chg$V5
     chh$tot <- chh$V4 + chh$V5
      
-    tem <- data.frame(cg=cg[,sum(tot == 0)]/nrow(cg), 
-                      chg=chg[,sum(tot == 0)]/nrow(chg), 
-                      chh=chh[,sum(tot == 0)]/nrow(chh))
+    tem <- data.frame(cg=cg[,sum(tot != 0)]/nrow(cg), 
+                      chg=chg[,sum(tot != 0)]/nrow(chg), 
+                      chh=chh[,sum(tot != 0)]/nrow(chh))
 }
 
 
