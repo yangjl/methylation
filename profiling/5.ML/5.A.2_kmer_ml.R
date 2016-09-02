@@ -55,6 +55,7 @@ head(sort(coef(cvfit, s = "lambda.min")))
 save(file="largedata/cvfit.RData", list="cvfit")
 #res <- coef(cvfit, s = "lambda.min")
 
+ob <- load("largedata/cvfit.RData")
 
 ### train binomial model
 #mfit <- glmnet(x= as.matrix(df[, idx]), y=df$mb, family = "binomial")
@@ -66,3 +67,6 @@ head(sort(coef(cvfit3, s = "lambda.min")))
 
 save(file="largedata/cvfit3.RData", list="cvfit3")
 #res <- coef(cvfit, s = "lambda.min")
+ob <- load("largedata/cvfit3.RData")
+
+

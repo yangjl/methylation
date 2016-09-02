@@ -35,7 +35,17 @@ tb$kmer <- nchar(as.character(tb$na))
 ## get mean count
 mc <- apply(out[, -1], 2, mean)
 
-hist(mc[which(tb$kmer == 7)])
+par(mfrow=c(2,3))
+hist(mc[which(tb$kmer == 2)], main="mean 2mer across genes", xlab="2mer")
+hist(mc[which(tb$kmer == 3)], main="mean 3mer across genes", xlab="3mer")
+hist(mc[which(tb$kmer == 4)], main="mean 4mer across genes", xlab="4mer")
+hist(mc[which(tb$kmer == 5)], main="mean 5mer across genes", xlab="5mer")
+hist(mc[which(tb$kmer == 6)], main="mean 6mer across genes", xlab="6mer")
+hist(mc[which(tb$kmer == 7)], main="mean 7mer across genes", xlab="7mer")
+
+
+
+
 
 
 

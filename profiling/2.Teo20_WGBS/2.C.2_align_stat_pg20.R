@@ -37,25 +37,44 @@ write.table(res, "cache/pg20_bismap_stat.csv", sep=",", row.names=FALSE, quote=F
 
 ######### Plot
 
-comp3 <- read.csv("cache/comp3_bismap_stat.csv")
+pg20 <- read.csv("cache/pg20_bismap_stat.csv")
 
 library(ggplot2)
 library(tidyr)
 
-lres <- gather(comp[, c("seqid", "mr1","mr0", "mrN")], type, reads, 2:4)
+mr <- gather(pg20[, c("seqid", "mr1","mr0", "mrN")], type, reads, 2:4)
+mr$type <- factor(mr$type, levels = c("mr1", "mrN", "mr0"))
+ratio <- gather(pg20[, c("seqid", "cg","chg", "chh")], type, cr, 2:4)
+ratio$type <- factor(ratio$type, levels = c("cg", "chg", "chh"))
 
+###### plot the mapping rate
+p1 <- ggplot(mr, aes(x=type, y=reads, fill=type)) +
+    geom_violin() +
+    theme_bw() +
+    theme(plot.title = element_text(color="red", size=20, face="bold.italic"),
+          axis.text.x = element_text(size=18),
+          axis.text.y = element_text(size=13),
+          axis.title = element_text(size=18, face="bold")) +
+    #scale_fill_manual(values=c("#008080", "#003366", "#40e0d0")) +
+    scale_x_discrete(labels=c("Unqiue", "Multiple", "Non")) +
+    ggtitle("Mapping Rates (N=20)") + xlab("") + 
+    ylab("Mapping Rate") + 
+    guides(fill=FALSE)
+#guides(colour=FALSE, linetype=FALSE)
+###### plot the mapping rate
+p2 <- ggplot(ratio, aes(x=type, y=cr, fill=type)) +
+    geom_boxplot() +
+    theme_bw() +
+    theme(plot.title = element_text(color="red", size=20, face="bold.italic"),
+          axis.text.x = element_text(size=18),
+          axis.text.y = element_text(size=13),
+          axis.title = element_text(size=18, face="bold")) +
+    #scale_fill_manual(values=c("#008080", "#003366", "#40e0d0")) +
+    scale_x_discrete(labels=c("CG", "CHG", "CHH")) +
+    ggtitle("Ratio of unmethylated C (N=20)") + xlab("") + 
+    ylab("Methylation Ratio") + 
+    guides(fill=FALSE)
+#guides(colour=FALSE, linetype=FALSE)
 
-#lres <- lres[order(lres$type, lres$type, decreasing = TRUE),]
-lres$type <- factor(lres$type, levels = c("mr1", "mrN", "mr0"), 
-                    labels=c("Unqiue", "Multiple", "Non"), ordered=TRUE)
-
-theme_set(theme_grey(base_size = 18)) 
-s <- ggplot(lres, aes(x=seqid, y=reads, fill = type)) + 
-    #opts(axis.text.x=theme_text(angle=90)) +
-    geom_bar(stat="identity", position="dodge") +
-    labs(x="", y="Mapping Rate", fill="Type") +
-    scale_x_discrete(labels=c("B73", "B73 <- N", "B73 <- VCF"))
-    #theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12)
-    #theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12))
-s
-
+source("~/Documents/Github/zmSNPtools/Rcodes/multiplot.R")
+multiplot(p1, p2, cols=2)
