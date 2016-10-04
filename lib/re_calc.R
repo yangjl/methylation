@@ -1,5 +1,5 @@
 
-re_calC <- function(myfile){
+re_calc <- function(myfile){
     ### First, SNP table:
     h <- read.table("largedata/gatk_vcf/JRI20_bi_snps_annot.header", header=T)
     ### I do not need to merge because the orders are exactly the same.
