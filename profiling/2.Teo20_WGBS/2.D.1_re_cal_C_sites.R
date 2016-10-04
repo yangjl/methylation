@@ -3,13 +3,17 @@
 ### purpose: re-calibrate the C/T and G/A heterozygote sites
 
 
+##get command line args
+options(echo=TRUE) # if you want see commands in output file
+args <- commandArgs(trailingOnly = TRUE)
 
-########
+JOBID <- as.numeric(as.character(args[1]))
+print(JOBID)
+###########
 library(data.table)
+source("lib/re_calc.R")
+
 files <- list.files(path="largedata/wgbs_smoothed", pattern="cg$", full.names = TRUE)
+out <- re_calc(files[JOBID])
 
-res <- re_calC(files)
-
-run_Rcodes(inputdf, outdir, cmdno = 100, rcodes = "lib/C_format.R",
-           arrayshid = "slurm-script/run_bcf_query_array.sh", email = NULL,
-           runinfo = c(FALSE, "bigmemh", 1))
+write.table(out, paste0(files[JOBID], ".out"), sep=",", row.names=FALSE, quote=FALSE)
