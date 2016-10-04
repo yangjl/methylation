@@ -33,19 +33,23 @@ re_calc <- function(myfile){
         out[!is.na(SAMPLE), tot := ceiling((V4 + V5)/2)]
         message(sprintf("###>>> summary: YR sites/tot [%s], ratio >1 [ %s ]", 
                         round(nrow(sub)/nrow(out), 3), 
-                        round(nrow(out[V4 > tot & SAMPLE == "Y",])/nrow(out), 3)))
+                        round(nrow(out[V4 > tot & (SAMPLE == "Y" | SAMPLE == "R"),])/nrow(out), 3)))
         
         tem <- data.frame(file=sid, chr=j, YRs=nrow(sub), tot=nrow(out))
         res <- rbind(res, tem)
         
-        out[V4 > tot & SAMPLE == "Y", tot := V4]
+        out[V4 > tot & (SAMPLE == "Y" | SAMPLE == "R"), tot := V4]
         
         out[order(V2)]
-        outf <- paste0(myfile, ".relc")
+        outf <- paste0(myfile, ".rc")
         message(sprintf("###>>> writing [ chr%s ] to [ %s ] ...", j, outf))
-        write.table(out[, c("snpid", "V1", "V2", "V3", "V4", "V5", "tot"), with=FALSE], 
-                    outf, sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
-        
+        if(j == 1){
+            write.table(out[, c("snpid", "V1", "V2", "V3", "V4", "V5", "tot"), with=FALSE], 
+                        outf, sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=FALSE)
+        }else{
+            write.table(out[, c("snpid", "V1", "V2", "V3", "V4", "V5", "tot"), with=FALSE], 
+                        outf, sep="\t", col.names=FALSE, row.names=FALSE, quote=FALSE, append=TRUE)
+        }
     }
     return(res)
 }
