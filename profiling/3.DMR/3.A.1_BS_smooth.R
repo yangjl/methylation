@@ -1,5 +1,5 @@
 ### Jinliang Yang
-### 10-04-2016
+### 10-10-2016
 ### purpose: BS smooth
 
 
@@ -7,11 +7,11 @@
 library(data.table)
 library(bsseq)
 
-meth2 <- fread("largedata/wgbs_smoothed/JRA1_pe.cg.relc")
+meth2 <- fread("largedata/wgbs_smoothed/JRA1_pe.cg.rc")
 
 
 meth3 <- as.data.frame(meth2)
-meth3$V8 <- meth3$V7 - meth3$V6
+#meth3$V8 <- meth3$V7 - meth3$V6
 
 methf <- subset(meth3, V5 != "." & V2=="+")
 
@@ -20,7 +20,7 @@ methf <- subset(meth3, V5 != "." & V2=="+")
 #tmp <- dat[dat$strand == "+",]
 
 BS <- BSseq(chr = meth3$V2, pos = meth3$V3,
-            M = as.matrix(meth3$V8, ncol = 1),
+            M = as.matrix(meth3$V5, ncol = 1),
             Cov = as.matrix(meth3$V7, ncol = 1), 
             sampleNames = "JRA1_pe_cg")
 
