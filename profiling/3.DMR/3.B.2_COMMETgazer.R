@@ -18,5 +18,6 @@ JOBID <- as.numeric(as.character(args[1]))
 print(JOBID)
 
 dirs <- dir(path="largedata/COMET", pattern="JR", full.names=TRUE, recursive=FALSE)
-system(paste("cd", dirs[JOBID]))
+
+setwd(dirs[JOBID])
 system("sh 1.COMETgazer.sh")
