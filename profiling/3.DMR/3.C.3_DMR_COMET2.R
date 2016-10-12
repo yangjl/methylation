@@ -15,9 +15,6 @@
 ##########################################################################################################################
 
 
-for chrom in `seq 1 22` 
-do
-R --no-save --verbose <<EOF
 
 library(IRanges)
 library(GenomicFeatures)
@@ -26,7 +23,7 @@ library(rtracklayer)
 #library(BSgenome.Hsapiens.UCSC.hg19)
 library(Repitools)
 
-chr9.methylation.blocks <- read.table("chr9.blocks.verified.txt", header=T)
+chr9.methylation.blocks <- read.table("largedata/COMET/JRA1/COMETs/chr9.blocks.verified.txt", header=T)
 chr9.methylation.blocks[,2] <- paste("chr", chr9.methylation.blocks[,2], sep="")
 
 chr9.meth.GR <- with(chr9.methylation.blocks, GRanges(chr, IRanges(start,stop), strand="+", score=round(average*1000)))
@@ -35,8 +32,34 @@ chr9.meth.low.GR <- subset(chr9.meth.GR, elementMetadata(chr9.meth.GR)[,1] <= 33
 chr9.meth.medium.GR <- subset(chr9.meth.GR, elementMetadata(chr9.meth.GR)[,1] > 330 & elementMetadata(chr9.meth.GR)[,1] < 660)
 chr9.meth.high.GR <- subset(chr9.meth.GR, elementMetadata(chr9.meth.GR)[,1] >= 660)
 
-chr.lengths <- c(800, 200, 200)
-names(chr.lengths) <- c("chr1", "chr2", "chr3")
+
+res1 <- data.frame(chr=seqnames(chr9.meth.high.GR), start=start(chr9.meth.high.GR), 
+                  end=end(chr9.meth.high.GR), score=mcols(chr9.meth.high.GR)$score)
+res2 <- data.frame(chr=seqnames(chr9.meth.medium.GR), start=start(chr9.meth.medium.GR), 
+                   end=end(chr9.meth.medium.GR), score=mcols(chr9.meth.medium.GR)$score)
+res3 <- data.frame(chr=seqnames(chr9.meth.low.GR), start=start(chr9.meth.low.GR), 
+                   end=end(chr9.meth.low.GR), score=mcols(chr9.meth.low.GR)$score)
+
+par(mfrow=c(3,1))
+res1 <- subset(res1, end < 10000000)
+plot(c(1, max(res1$end)), c(0, 1000), type= "n", xlab="", ylab="")
+rect(xleft=res1$start, ybottom=0, xright=res1$end, ytop=res1$score, col="red")
+
+res2 <- subset(res2, end < 10000000)
+plot(c(1, max(res2$end)), c(0, 1000), type= "n", xlab="", ylab="")
+rect(xleft=res2$start, ybottom=0, xright=res2$end, ytop=res2$score, col="red")
+
+res3 <- subset(res3, end < 10000000)
+plot(c(1, max(res3$end)), c(0, 1000), type= "n", xlab="", ylab="")
+rect(xleft=res3$start, ybottom=0, xright=res3$end, ytop=res3$score, col="red")
+
+
+
+
+
+
+chr.lengths <- c(800, 200, 2000000)
+names(chr.lengths) <- c("chr1", "chr2", "chr9")
 genome.windows.1HK <- genomeBlocks(chr.lengths, width=100000) 
 
 # Subset methylation blocks by level
@@ -47,21 +70,25 @@ chr9.meth.high.counts.1HK.df <- data.frame(as.data.frame(genome.windows.1HK), ch
 chr9.meth.high.counts.1HK.GR <- with(chr9.meth.high.counts.1HK.df, 
                                      GRanges(seqnames, IRanges(start,end), strand="+", score= chr9.meth.high.counts.1HK.df[,6]))
 
-export.bedGraph(chr9.meth.high.counts.1HK.GR  , "chr9.methylation.blocks.domains.high.1HK.bedGraph")
+#export.bedGraph(chr9.meth.high.counts.1HK.GR  , "chr9.methylation.blocks.domains.high.1HK.bedGraph")
 
 chr9.meth.medium.counts.1HK <- annotationBlocksCounts(chr9.meth.medium.GR, anno=genome.windows.1HK)
 chr9.meth.medium.counts.1HK.df <- data.frame(as.data.frame(genome.windows.1HK), chr9.meth.medium.counts.1HK)
 
 chr9.meth.medium.counts.1HK.GR <- with(chr9.meth.medium.counts.1HK.df, GRanges(seqnames, IRanges(start,end), strand="+", score= chr9.meth.medium.counts.1HK.df[,6]))
 
-export.bedGraph(chr9.meth.medium.counts.1HK.GR  , "chr9.methylation.blocks.domains.medium.1HK.bedGraph")
+#export.bedGraph(chr9.meth.medium.counts.1HK.GR  , "chr9.methylation.blocks.domains.medium.1HK.bedGraph")
 
 chr9.meth.low.counts.1HK <- annotationBlocksCounts(chr9.meth.low.GR, anno=genome.windows.1HK)
 chr9.meth.low.counts.1HK.df <- data.frame(as.data.frame(genome.windows.1HK), chr9.meth.low.counts.1HK)
 
 chr9.meth.low.counts.1HK.GR <- with(chr9.meth.low.counts.1HK.df, GRanges(seqnames, IRanges(start,end), strand="+", score= chr9.meth.low.counts.1HK.df[,6]))
 
-export.bedGraph(chr9.meth.low.counts.1HK.GR  , "chr9.methylation.blocks.domains.low.1HK.bedGraph")
+#export.bedGraph(chr9.meth.low.counts.1HK.GR  , "chr9.methylation.blocks.domains.low.1HK.bedGraph")
+
+
+
+
 
 
 
