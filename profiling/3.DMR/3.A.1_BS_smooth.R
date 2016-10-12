@@ -48,7 +48,7 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
             eline <- BIN*b
             myBS <- BS[sline:eline, ]
             
-            message(sprintf("###>>> Smoothing [chr%s], bin [%s: %s - %s] ...", i, b, sline, eline))
+            message(sprintf("###>>> Smoothing [chr%s], bin [%s/%s: %s - %s] ...", i, b, tot, sline, eline))
             res <- BSmooth(myBS, ns = 70, h = 1000, maxGap = 10^8,
                            parallelBy = c("sample", "chromosome"), mc.preschedule = FALSE,
                            mc.cores = 1, keep.se = FALSE, verbose = TRUE)
