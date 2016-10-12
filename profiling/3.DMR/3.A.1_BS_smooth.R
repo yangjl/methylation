@@ -23,7 +23,7 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
     
     for(i in chrs){
         #tmp <- dat[dat$strand == "+",]
-        message(sprintf("###>>> Working on [%s] at [chr%s] ...", myid, i))
+        message(sprintf("[runbsmooth] Working on [%s] at [chr%s] ...", myid, i))
         
         meth0 <- subset(meth, V2 %in% i)
         meth0$V2 <- paste0("chr", meth0$V2)
@@ -46,9 +46,13 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
         for(b in 1:tot){
             sline <- BIN*(b-1) + 1
             eline <- BIN*b
+            if(eline > length(BS)){
+                eline <- length(BS)
+            }
             myBS <- BS[sline:eline, ]
             
-            message(sprintf("###>>> Smoothing [chr%s], bin [%s/%s: %s - %s] ...", i, b, tot, sline, eline))
+            message(sprintf("[runbsmooth] Smoothing [chr%s], bin [%s/%s: %s - %s] ...",
+                            i, b, tot, sline, eline))
             res <- BSmooth(myBS, ns = 70, h = 1000, maxGap = 10^8,
                            parallelBy = c("sample", "chromosome"), mc.preschedule = FALSE,
                            mc.cores = 1, keep.se = FALSE, verbose = TRUE)
@@ -70,10 +74,10 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
 }
 
 ### test
-runbsmooth(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="largedata/COMET", 
-           cores=1, chrs=10, BIN=1000000)
+#runbsmooth(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="largedata/COMET", 
+#           cores=1, chrs=10, BIN=1000000)
 
 ## CG
 file1 <- list.files(path="largedata/wgbs_smoothed", pattern="cg.rc$", full.names = TRUE)
-runbsmooth(infile=file1[JOBID], outdir="largedata/COMET", cores=8, chrs=1:10)
+runbsmooth(infile=file1[JOBID], outdir="largedata/COMET", cores=1, chrs=1:10, BIN=1000000)
 
