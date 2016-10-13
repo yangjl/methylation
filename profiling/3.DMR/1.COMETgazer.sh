@@ -42,6 +42,7 @@ EOF
 	touch output.chr.df.txt
 
 	blocks	# Calls a program written in C++ for block segmentation/assignment
+	blocks > output.chr.df.txt
 
 	mv output.chr.df.txt chr$chrom.blocks.df.txt  # File containing the oscillator of methylation (OM) distribution for every CpG 
 done
@@ -66,16 +67,15 @@ do
         		max[$7]=$4;
     		count[$7]++
 	}
-	END 
-	{
+	END {
 		for(element in sum)
       			printf("%s, %01f, %01f, %01f\n", element, max[element], min[element], sum[element]/count[element])
 	}' chr$chrom.blocks.df.txt > chr$chrom.block.sizes.txt
 	
-
 	sort -gk 1 chr$chrom.block.sizes.txt > chr$chrom.block.sizes.sorted.txt
 
 	R --no-save --verbose <<EOF
+	    #library("bitops")
 		library(GenomicFeatures)
 		chr$chrom.block.sizes <- read.csv("chr$chrom.block.sizes.sorted.txt", header=F, skip=1)
 		chr$chrom.block.sizes[,5] <- (chr$chrom.block.sizes[,2] - chr$chrom.block.sizes[,3])/2*100
@@ -102,13 +102,13 @@ done
 
 # I/O cleanup
 
-#rm *.head
-#rm *run*
-#rm *blocks.10*
-#rm *sizes*
-#mkdir COMETs
-#mv *verified* COMETs
-#mkdir data.frame
-#mv chr*df.txt data.frame/
+rm *.head
+rm *run*
+rm *blocks.10*
+rm *sizes*
+mkdir COMETs
+mv *verified* COMETs
+mkdir data.frame
+mv chr*df.txt data.frame/
 
 

@@ -4,11 +4,6 @@
 ### http://bioconductor.org/packages/devel/bioc/html/bsseq.html
 ### manual: http://bioconductor.org/packages/devel/bioc/vignettes/bsseq/inst/doc/bsseq.pdf
 
-#dirs <- dir(path="largedata/COMET", pattern="JR", full.names=TRUE, recursive=FALSE)
-#for(i in 1:length(dirs)){
-#    file.copy(from="profiling/3.DMR/1.COMETgazer.sh", to=dirs[i], overwrite=TRUE)
-#}
-
 
 ##get command line args
 options(echo=TRUE) # if you want see commands in output file

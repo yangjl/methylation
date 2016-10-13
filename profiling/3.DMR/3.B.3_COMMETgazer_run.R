@@ -2,6 +2,10 @@
 ### 10-12-2016
 ### purpose: run COMETgazer
 
+dirs <- dir(path="largedata/COMET", pattern="JR", full.names=TRUE, recursive=FALSE)
+for(i in 1:length(dirs)){
+    file.copy(from="profiling/3.DMR/1.COMETgazer.sh", to=dirs[i], overwrite=TRUE)
+}
 
 
 library("farmeR")
