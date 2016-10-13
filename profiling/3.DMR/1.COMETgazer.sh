@@ -39,9 +39,8 @@ do
 EOF
 
 	sed 's/chr//g'  chr$chrom.df.txt > chr.df.txt
-	touch output.chr.df.txt
-
-	blocks	# Calls a program written in C++ for block segmentation/assignment
+	#touch output.chr.df.txt
+	#blocks	# Calls a program written in C++ for block segmentation/assignment
 	blocks > output.chr.df.txt
 
 	mv output.chr.df.txt chr$chrom.blocks.df.txt  # File containing the oscillator of methylation (OM) distribution for every CpG 
