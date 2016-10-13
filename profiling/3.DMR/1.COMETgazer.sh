@@ -96,22 +96,19 @@ do
 		chr$chrom.blocks.head <- subset(chr$chrom.blocks.total, chr$chrom.blocks[,8] > 300 )
 		chr$chrom.blocks.trimmed <- subset(chr$chrom.blocks.head, chr$chrom.blocks.head[,8] < quantile(chr$chrom.blocks.head[,8], 0.9999))
 		write.table(chr$chrom.blocks.trimmed, "chr$chrom.blocks.verified.txt", sep="\t", row.names=F)
-		write.table(as.matrix(summary(chr$chrom.blocks.trimmed[,8])), "chr$chrom.block.sizes.summary.txt", sep="\t")
 EOF
 done
 
 
 # I/O cleanup
 
-rm *.head
-rm *run*
-rm *blocks.10*
-rm *sizes*
-mkdir COMETs
-mv *verified* COMETs
-mkdir data.frame
-mkdir summaries
-mv *summary* summaries/
-mv chr*df.txt data.frame/
+#rm *.head
+#rm *run*
+#rm *blocks.10*
+#rm *sizes*
+#mkdir COMETs
+#mv *verified* COMETs
+#mkdir data.frame
+#mv chr*df.txt data.frame/
 
 
