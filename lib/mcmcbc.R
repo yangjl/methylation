@@ -132,6 +132,22 @@ MCMCBC <- function(my_sfs, rates, sd, k,
     ### posterior SFS
     n <- max(k)
     #Plot maximum a posteriori (mode)
+    
+    ## ALPHA
+    prior.mu=rexp(length(mu.samples[-c(1:(0.1*ngen/sample.freq))]),rates[1])
+    post.mu=mu.samples[-c(1:(0.1*ngen/sample.freq))]
+    mode.mu=density(post.mu)$x[which(density(post.mu)$y==max(density(post.mu)$y))]
+    
+    #BETA
+    prior.nu=rexp(length(nu.samples[-c(1:(0.1*ngen/sample.freq))]),rates[2])
+    post.nu=nu.samples[-c(1:(0.1*ngen/sample.freq))]
+    mode.nu=density(post.nu)$x[which(density(post.nu)$y==max(density(post.nu)$y))]
+    
+    #GAMMA
+    prior.s=rexp(length(s.samples[-c(1:(0.1*ngen/sample.freq))]),rates[3])
+    post.s=s.samples[-c(1:(0.1*ngen/sample.freq))]
+    mode.s=density(post.s)$x[which(density(post.s)$y==max(density(post.s)$y))]
+    
     post_sfs=sapply(k,function(K){
         log(choose(n,K))+(f1(mode.nu*4*Ne+K,mode.mu*4*Ne+mode.nu*4*Ne+n,mode.s*4*Ne)+proch(mode.nu*4*Ne,K)+proch(mode.mu*4*Ne,n-K))-(f1(mode.nu*4*Ne,mode.mu*4*Ne+mode.nu*4*Ne,mode.s*4*Ne)+proch(mode.mu*4*Ne+mode.nu*4*Ne,n))})
     
