@@ -29,7 +29,24 @@ cat_comet <- function(){
 cat_comet()
 
 
+get_sum <- function(){
+    files <- list.files(path="largedata/COMET/CG_COMET", pattern="csv", full.names=T)
+    out <- data.frame()
+    for(i in 1:length(files)){
+        df <- read.csv(files[i])
+        sid <- gsub(".*/|_.*", "", files[i])
+        message(sprintf("###>>> Processing sample: [ %s ] ...", sid))
+        tem <- data.frame(id=sid, high=sum(subset(df, level %in% "high")$size),
+                          med=sum(subset(df, level %in% "med")$size),
+                          low=sum(subset(df, level %in% "low")$size) )
+        
+        out <- rbind(out, tem)
+    }
+    return(out)
+}
 
-
+##########
+res <- get_sum()
+write.table(res, "cache/COMET_CG_sum_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
