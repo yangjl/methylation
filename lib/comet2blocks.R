@@ -70,7 +70,7 @@ chop2blocks <- function(cometls, chri){
                   ranges=IRanges(start=bp[-length(bp)], end=bp[-1]-1),
                   strand = Rle(strand("+")) )
     
-    out <- data.frame(chr=seqnames(mygr), bid=paste(start(mygr), end(mygr), sep="_"))
+    out <- data.frame(chr=seqnames(gr), bid=paste(start(gr), end(gr), sep="_"))
     for(j in 1:length(cometls)){
         message(sprintf("[chop2blocks] working on [ sample: %s] ... ", names(cometls[j])))
         ### use genomicranges to find overlaps
