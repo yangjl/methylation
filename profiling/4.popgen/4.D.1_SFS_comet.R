@@ -33,6 +33,13 @@ for(i in 1:length(files)){
                          cols=3:22)
 }
     
-
+############
+sfs_files <- list.files(path="cache", pattern="sfs_chr10_comet", full.names = TRUE)
+par(mfrow=c(3, 3))
+for(i in 1:length(files)){
+    sfs <- read.csv(sfs_files[i])
+    f <- gsub(".*_|.csv", "", sfs_files[i])
+    plot(sfs$Freq, main=f)
+}
 
 

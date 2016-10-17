@@ -49,4 +49,4 @@ get_sum <- function(){
 res <- get_sum()
 write.table(res, "cache/COMET_CG_sum_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
 
-
+stat <- read.csv("cache/COMET_CG_sum_stat.csv")
