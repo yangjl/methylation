@@ -11,4 +11,4 @@ run_Rcodes(inputdf=data.frame(file=1:9, out=1), outdir="slurm-script", cmdno=1,
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 2, "16G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 30G --ntasks=4 --time 24:00:00 slurm-script/run_rcode_array.sh
+###>>> RUN: sbatch -p bigmemm --mem 16G --ntasks=2 --time 12:00:00 slurm-script/run_rcode_array.sh

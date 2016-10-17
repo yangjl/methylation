@@ -8,13 +8,10 @@ library("data.table")
 res <- read.csv("cache/stat_exon_mean_var.csv")
 
 
-
-
-
 RAdata <- fread("largedata/vcf_files/teo20_RA_exon.txt")
 
 
-getsfs <- function(RAdata, context="CG", cols=3:22, BINSIZE=100, geneids=subset(res, mm <= 0.6)$geneid){
+getsfs <- function(RAdata, context="CG", cols=3:22, BINSIZE=100, geneids=subset(res, mm > 0.6)$geneid){
     
     ### features
     gene <- get_feature(gff="~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", features="gene")
@@ -22,7 +19,7 @@ getsfs <- function(RAdata, context="CG", cols=3:22, BINSIZE=100, geneids=subset(
     gr0 = with(subgen, GRanges(seqnames=seqname, IRanges(start=start, end=end), strand=strand, geneid=attribute ))
     
     ### methylation
-    cg <- exon[ V2 == context] #9270420      22
+    cg <- RAdata[ V2 == context] #9270420      22
     cg$chr <- gsub("_.*", "", cg$V1)
     cg$pos <- as.numeric(as.character(gsub(".*_", "", cg$V1)))
     
@@ -84,5 +81,10 @@ write.table(sfs, "cache/sfs_test.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 write.table(sfs, "cache/sfs_gbM_98k.csv", sep=",", row.names=FALSE, quote=FALSE)
 write.table(sfs, "cache/sfs_ngbM_550k.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+########################
+cg <- as.data.frame(cg)
+sub <- subset(cg, chr == 10)
+
 
 
