@@ -105,17 +105,58 @@ mplot <- function(res, burnin=0.25, rates=c(1E7,1E8,1E6)){
     message(sprintf("posterior mu [ %s ], nu [ %s ] and s [ %s ]", mode.mu, mode.nu, mode.s))
     plot_grid(mtrace,ntrace,strace,muplot,nuplot,splot,muplotzoom,nuplotzoom,splotzoom,
               ncol=3,rel_heights=c(1.5,1,1), align="v")
-    #return(ltrace)
-    #plot(ltrace)
+    
 }
 
-sfsplot <- function(res, k=0:40){
+sfsplot <- function(res, burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot=NULL, Ne=150000, k=0:40){
     cbPalette=c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-    my_sfs <- res$my_sfs
-    post_sfs <- res$post_sfs
+    s.samples <- res[['samples']]$s
+    nu.samples <- res[['samples']]$nu
+    mu.samples <- res[['samples']]$mu
+    l.samples <- res[['samples']]$l
+    mu.acc <- res[['acc']]$mu
+    nu.acc <- res[['acc']]$nu
+    s.acc <- res[['acc']]$s
+    n=max(k)
     
-    par(mfrow=c(1,1))
-    plot(my_sfs ~ k, pch=19, cex=2, ylab="counts", xlab="number of chromosomes", cex.lab=1.5)
-    points(post_sfs ~ k, cex=1, col=cbPalette[2], pch=19)
-    legend("top",legend=c("observed","mean of posterior"), fill=c("black",cbPalette[2]))
+    s.samples=s.samples[(length(s.samples)*burnin+1):length(s.samples)]
+    nu.samples=nu.samples[(length(nu.samples)*burnin+1):length(nu.samples)]
+    mu.samples=mu.samples[(length(mu.samples)*burnin+1):length(mu.samples)]
+    
+    l.samples=l.samples[(length(l.samples)*burnin+1):length(l.samples)]
+    #####
+    fake=FALSE
+    prior.mu=rexp(length(mu.samples),rates[1])
+    post.mu=mu.samples
+    mode.mu=density(post.mu)$x[which(density(post.mu)$y==max(density(post.mu)$y))]
+    
+    prior.nu=rexp(length(nu.samples),rates[2])
+    post.nu=nu.samples
+    mode.nu=density(post.nu)$x[which(density(post.nu)$y==max(density(post.nu)$y))]
+    
+    prior.s=rexp(length(s.samples),rates[3])
+    post.s=s.samples
+    mode.s=density(post.s)$x[which(density(post.s)$y==max(density(post.s)$y))]
+    
+    my_sfs <- res$my_sfs
+    if(sfsplot == "plotmean"){
+        #plot mean
+        plot(my_sfs~(c(0:max(k))),pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
+        post_sfs=sapply(k,function(K){
+            log(choose(n,K))+(f1(mean(post.nu)*4*Ne+K,mean(post.mu)*4*Ne+mean(post.nu)*4*Ne+n,mean(post.s)*4*Ne)+proch(mean(post.nu)*4*Ne,K)+proch(mean(post.mu)*4*Ne,n-K))-(f1(mean(post.nu)*4*Ne,mean(post.mu)*4*Ne+mean(post.nu)*4*Ne,mean(post.s)*4*Ne)+proch(mean(post.mu)*4*Ne+mean(post.nu)*4*Ne,n))})
+        post_sfs=post_sfs-max(post_sfs)
+        post_sfs=exp(post_sfs)/sum(exp(post_sfs))*sum(my_sfs)
+        points(post_sfs~c(0:max(k)),cex=1,col=cbPalette[2],pch=19)
+        legend("top",legend=c("observed","mean of posterior"),fill=c("black",cbPalette[2]))
+    }
+    if(sfsplot == "plotmode"){
+        #Plot maximum a posteriori (mode)
+        plot(my_sfs~(c(0:max(k))),pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
+        post_sfs=sapply(k,function(K){
+            log(choose(n,K))+(f1(mode.nu*4*Ne+K,mode.mu*4*Ne+mode.nu*4*Ne+n,mode.s*4*Ne)+proch(mode.nu*4*Ne,K)+proch(mode.mu*4*Ne,n-K))-(f1(mode.nu*4*Ne,mode.mu*4*Ne+mode.nu*4*Ne,mode.s*4*Ne)+proch(mode.mu*4*Ne+mode.nu*4*Ne,n))})
+        post_sfs=post_sfs-max(post_sfs)
+        post_sfs=exp(post_sfs)/sum(exp(post_sfs))*sum(my_sfs)
+        points(post_sfs~c(0:max(k)),cex=1,col=cbPalette[2],pch=19)
+        legend("top",legend=c("observed","mode of posterior"),fill=c("black",cbPalette[2]))
+    }
 }
