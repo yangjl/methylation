@@ -14,7 +14,7 @@ source("lib/mcmcbc.R")
 
 files <- list.files(path="cache", pattern="gbm_sfs_cg_comet_0.33", full.names=TRUE)
 sfs <- read.csv(files[JOBID])
-if(sfs < 41){
+if(nrow(sfs) < 41){
     mys <- data.frame(f0=0:40, Freq=0)
     mys <- subset(mys, !(f0 %in% sfs$f0))
     sfs <- rbind(sfs, mys)
