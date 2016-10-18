@@ -13,4 +13,9 @@ set_array_job(shid = "slurm-script/run_beagle.sh",
               jobid = "beagle", email = "yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 10, "80G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 80G --ntasks=10 --time=48:00:00 slurm-script/run_beagle.sh
+###>>> RUN: sbatch -p bigmemm --mem 80G --ntasks=10 --time=96:00:00 slurm-script/run_beagle.sh
+
+
+ibd <- read.table("largedata/gatk_vcf/JRI20_ibd.ibd")
+write.table(ibd, "largedata/gatk_vcf/JRI20_ibd_partial.ibd", sep="\t", row.names=FALSE, quote=FALSE, col.names=FALSE)
+
