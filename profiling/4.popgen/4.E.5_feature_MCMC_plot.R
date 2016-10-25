@@ -8,13 +8,13 @@ source("lib/mcmcbc.R")
 
 ob <- load("largedata/sfs_cg_comet_0.33_gene.RData")
 sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot="plotmean", Ne=150000, k=0:40)
-mplot(res, burnin=0.2, rates=c(1E8,1E8,1E8))
-# posterior mu [ 1.09605214547552e-06 ], nu [ 4.26242752079954e-08 ] and s [ 1.63352605892327e-05 ]
+mplot(res, burnin=0.4, rates=c(1E8,1E8,1E8))
+# posterior mu [ 4.60934455109854e-07 ], nu [ 6.77645732778247e-07 ] and s [ 1.79033264284426e-06 ]
 
 ob <- load("largedata/sfs_cg_comet_0.33_exon.RData")
-sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E5), sfsplot="plotmean", Ne=150000, k=0:40)
+sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot="plotmean", Ne=150000, k=0:40)
 mplot(res, burnin=0.2, rates=c(1E8,1E8,1E5))
-# posterior mu [ 4.64966149155177e-06 ], nu [ 2.30681386298064e-05 ] and s [ 2.42128603993789e-10 ]
+# posterior mu [ 6.62599293755031e-07 ], nu [ 1.03146663162443e-07 ] and s [ 7.32085981794232e-06 ]
 
 ob <- load("largedata/sfs_cg_comet_0.33_intron.RData")
 
@@ -56,7 +56,7 @@ sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E5), sfsplot="plotmode", Ne=150000, k=0:
 ob <- load("largedata/gbm_sfs_cg_comet_0.33_intron.RData")
 mplot(res, burnin=0.2, rates=c(1E8,1E8, 1E5))
 sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E5), sfsplot="plotmean", Ne=150000, k=0:40)
-sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E5), sfsplot="plotmode", Ne=150000, k=0:40)
+#sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E5), sfsplot="plotmode", Ne=150000, k=0:40)
 #posterior mu [ 7.53712629946411e-07 ], nu [ 4.37777207495372e-08 ] and s [ 1.45222758073796e-05 ]
 
 
