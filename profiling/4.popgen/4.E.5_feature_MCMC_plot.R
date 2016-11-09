@@ -8,7 +8,7 @@ source("lib/mcmcbc.R")
 
 ob <- load("largedata/sfs_cg_comet_0.33_gene.RData")
 sfsplot(res,burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot="plotmean", Ne=150000, k=0:40)
-mplot(res, burnin=0.4, rates=c(1E8,1E8,1E8))
+mplot(res, burnin=0.2, rates=c(1E8,1E8,1E8))
 # posterior mu [ 4.60934455109854e-07 ], nu [ 6.77645732778247e-07 ] and s [ 1.79033264284426e-06 ]
 
 ob <- load("largedata/sfs_cg_comet_0.33_exon.RData")
