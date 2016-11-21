@@ -1,9 +1,28 @@
+## To Do List:
 1. plot the genome-wide methylation differences.
 2. identify DMR
 3. correlate DMR with genomic features
 4. Whether selection sweeps associated with differential methylation patterns: see new Tajima's D-like statistic
 
-
+## Problems
+1. fix the Comethylation boundary and missing data issue
+2. IBD failure:
+```
+Module slurm/16.05.5 loaded
+Module openmpi/2.0.1 loaded
+Module JAVA 1.8 Loaded.
+Exception in thread "main" java.lang.IllegalArgumentException:
+8       174956473       8_174956473     C       G,*
+7       1254    7_1254  T       G
+        at ibd.IbdSegment.checkArguments(IbdSegment.java:85)
+        at ibd.IbdSegment.<init>(IbdSegment.java:68)
+        at main.WindowWriter.merge(WindowWriter.java:248)
+        at main.WindowWriter.printIbd(WindowWriter.java:226)
+        at main.WindowWriter.printIbd(WindowWriter.java:205)
+        at main.Main.printOutput(Main.java:207)
+        at main.Main.phaseData(Main.java:157)
+        at main.Main.main(Main.java:115)
+```
 
 
 ## QC report of WGBS

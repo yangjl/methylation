@@ -141,7 +141,7 @@ sfsplot <- function(res, burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot=NULL, Ne=15000
     my_sfs <- res$my_sfs
     if(sfsplot == "plotmean"){
         #plot mean
-        plot(my_sfs~(c(0:max(k))),pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
+        plot(my_sfs~(c(0:max(k))), ylim=c(0, max(my_sfs)*1.3), pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
         post_sfs=sapply(k,function(K){
             log(choose(n,K))+(f1(mean(post.nu)*4*Ne+K,mean(post.mu)*4*Ne+mean(post.nu)*4*Ne+n,mean(post.s)*4*Ne)+proch(mean(post.nu)*4*Ne,K)+proch(mean(post.mu)*4*Ne,n-K))-(f1(mean(post.nu)*4*Ne,mean(post.mu)*4*Ne+mean(post.nu)*4*Ne,mean(post.s)*4*Ne)+proch(mean(post.mu)*4*Ne+mean(post.nu)*4*Ne,n))})
         post_sfs=post_sfs-max(post_sfs)
@@ -151,7 +151,7 @@ sfsplot <- function(res, burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot=NULL, Ne=15000
     }
     if(sfsplot == "plotmode"){
         #Plot maximum a posteriori (mode)
-        plot(my_sfs~(c(0:max(k))),pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
+        plot(my_sfs~(c(0:max(k))), ylim=c(0, max(my_sfs)*1.3), pch=19,cex=2,ylab="counts",xlab="number of chromosomes",cex.lab=1.5)
         post_sfs=sapply(k,function(K){
             log(choose(n,K))+(f1(mode.nu*4*Ne+K,mode.mu*4*Ne+mode.nu*4*Ne+n,mode.s*4*Ne)+proch(mode.nu*4*Ne,K)+proch(mode.mu*4*Ne,n-K))-(f1(mode.nu*4*Ne,mode.mu*4*Ne+mode.nu*4*Ne,mode.s*4*Ne)+proch(mode.mu*4*Ne+mode.nu*4*Ne,n))})
         post_sfs=post_sfs-max(post_sfs)
