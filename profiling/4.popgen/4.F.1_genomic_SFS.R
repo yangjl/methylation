@@ -67,7 +67,7 @@ frq1 <- subset(frq, NCHROBS == 40)
 frq1$count <- frq1$NCHROBS*frq1$MAF
 out1 <- table(frq1$count)
 
-write.table(as.data.frame(out1), "gbm_sfs_genomic.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(as.data.frame(out1), "cache/gbm_sfs_genomic.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
 
