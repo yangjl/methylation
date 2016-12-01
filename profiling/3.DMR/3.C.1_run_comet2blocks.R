@@ -19,6 +19,7 @@ write.table(res, "largedata/COMET/CG_COMET/comet_blocks.csv", sep=",", row.names
 ################ 
 res <- fread("largedata/COMET/CG_COMET/comet_blocks.csv", data.table=FALSE)
 
+### determining variable or conserved sites
 vout <- res[, 1:2]
 vout$sites <- unlist(apply(res[, -1:-2], 1, function(x){
     x <- x[x >= 0]
@@ -46,16 +47,18 @@ sum(subset(vout, sites == 3)$bp)
 head(subset(res, bid %in% subset(vout, sites==0)$bid))
 
 
-vout0 <- subset(vout, sites == 0)
-vout2 <- subset(vout, sites == 2)
-vout1 <- subset(vout, sites == 1)
-vout3 <- subset(vout, sites == 3)
+vout0 <- subset(vout, sites == 0) # low
+vout2 <- subset(vout, sites == 2) # high
+vout1 <- subset(vout, sites == 1) # med
+vout3 <- subset(vout, sites == 3) #variable
+
+save(list=c("vout0", "vout1", "vout2", "vout3"), file="largedata/chr10_comet.RData")
 
 plot(c(1, max(vout$end)), c(0, 4), type="n", pch=16, cex=0.5, col="grey", 
      xlab="Chr10", ylab="Methylation Ratio", main="Chr10 CG methylation (N=20)")
 #points(out$start, out$score, pch=16, cex=0.6, col=makeTransparent("darkblue", alpha=0.5))
 
-
+library(farmeR)
 c <- makeTransparent(c("#65534f", "#36566d"), alpha=0.6)
 rect(xleft=vout0$start, ybottom=0, xright=vout0$end, ytop=1, col="red")
 rect(xleft=vout1$start, ybottom=1, xright=vout1$end, ytop=2, col="#8e2c21")
