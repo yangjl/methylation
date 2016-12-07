@@ -29,7 +29,7 @@ out <- gather(tab, "type", "value", 2:3)
 
 s1 <- ggplot(out, aes(sfs, value, fill=type)) + geom_bar(stat="identity", position = "dodge") +
     #theme_bw() +
-    xlab("SFS") +
+    xlab("") +
     ylab("Frequency") +
     #scale_fill_manual(values=c("#ff0000", "#008080", "#003366"),
     #                  name="", labels=c("Class I", "Class II and III", "Other TE")) +
@@ -49,7 +49,7 @@ out2 <- gather(gen[, c("site", "onek", "exon", "intron")], "type", "value", 2:4)
 s2 <- ggplot(out2, aes(site, value, fill=type)) +
     geom_bar(stat="identity", position = "dodge") +
     #theme_bw() +
-    xlab("SFS") +
+    xlab("") +
     ylab("Frequency") +
     #scale_fill_manual(values=c("#ff0000", "#008080", "#003366"),
     #                  name="", labels=c("Exon", "Intron", "1k upstream")) +
@@ -69,7 +69,7 @@ out3 <- gather(tab4[, c("site", "c1", "c2", "c3")], "type", "value", 2:4)
 s3 <- ggplot(out3, aes(site, value, fill=type)) +
     geom_bar(stat="identity", position = "dodge") +
     #theme_bw() +
-    xlab("SFS") +
+    xlab("") +
     ylab("Frequency") +
     #scale_fill_manual(values=c("#ff0000", "#008080", "#003366"),
     #                  name="", labels=c("Class I", "Class II and III", "Other TE")) +
@@ -79,19 +79,31 @@ s3 <- ggplot(out3, aes(site, value, fill=type)) +
 s3
 
 
+s4 <- ggplot(df, aes(factor(sfs), log(length))) + geom_boxplot() +
+    #theme_bw() +
+    xlab("") +
+    ylab("COMET log(bp)") +
+    #scale_fill_manual(values=c("#ff0000", "#008080", "#003366"),
+    #                  name="", labels=c("Class I", "Class II and III", "Other TE")) +
+    scale_x_discrete(breaks=c(0, 10, 20, 30, 40)) +
+    theme(legend.position="top", axis.text=element_text(size=15), axis.title=element_text(size=15) )
+
+#########
+s4
 
 ###################################################################################################
 ### SFS and transposons
 ### cowplot: combined
-p <- plot_grid(s1, s2, s3, ncol=1,rel_heights=c(1,1,1), align="v")
+p <- plot_grid(s1, s2, s3, s4, ncol=1, rel_heights=c(1,1,1,1), align="v")
 
-pdf("graphs/Figure_sfs_cg.pdf", width=6, height=10)
-ggdraw(p) + draw_plot_label(c("A", "B", "C" ), c(0, 0, 0), c(1, 2/3, 1/3), size=15)
+pdf("graphs/Figure_sfs_cg.pdf", width=6, height=12)
+ggdraw(p) + draw_plot_label(c("A", "B", "C", "D" ), c(0, 0, 0, 0), c(1, 3/4, 2/4, 1/4), size=15)
 dev.off()
 
 
 
 
 
+plot_grid(s1,ncol=1, align="v")
 
 

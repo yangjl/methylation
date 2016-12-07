@@ -81,3 +81,4 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
 file1 <- list.files(path="largedata/wgbs_smoothed", pattern="chh.rc$", full.names = TRUE)
 runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=1:10, BIN=1000000)
 
+runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=5, chrs=5, BIN=1000000)
