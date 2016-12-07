@@ -7,17 +7,37 @@ library("plyr")
 library("GenomicRanges")
 library("data.table")
 source("lib/comet2blocks.R")
+# https://www.r-bloggers.com/fitting-mixture-distributions-with-the-r-package-mixtools/
+library(mixtools)
 
-files <- list.files(path="largedata/COMET/CG_COMET", pattern="csv", full.names=T)
 
-res <- comet2blocks(files, chri=10, cutoff=c(0.33, 0.66))
+files <- list.files(path="largedata/COMET/CG_COMET", pattern="COMET.csv", full.names=T)
+res <- data.frame()
+for(myi in 1:10){
+    out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=c(0.2, 0.7))
+    res <- rbind(out, res)
+}
 
-out <- res
-write.table(res, "largedata/COMET/CG_COMET/comet_blocks.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(out, "largedata/COMET/CG_COMET/chrall_comet_blocks.csv", sep=",", row.names=FALSE, quote=FALSE)
     
 
 ################ 
-res <- fread("largedata/COMET/CG_COMET/comet_blocks.csv", data.table=FALSE)
+res <- fread("largedata/COMET/CG_COMET/chrall_comet_blocks.csv", data.table=FALSE)
+
+df <- res[, 1:2]
+df$sfs <- apply(res[,-1:-2], 1, sum)
+df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
+df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
+df$length <- df$end - df$start + 1
+
+write.table(df, "cache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+dt <- as.data.table(df)
+tab1 <- dt[, .(bp = sum(length)), by= sfs] 
+tab2 <- table(df$sfs)
+
+
+
 
 ### determining variable or conserved sites
 vout <- res[, 1:2]
