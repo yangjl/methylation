@@ -34,8 +34,12 @@ write.table(df, "cache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote
 
 
 
-
-
+####### plot
+b <- read.csv("cache/SFS_comet_blocks_CG.csv")
+hist(log10(b$length), xlab="COMET Length log10(bp)", main="CG COMETs", col="#cdc0b0")
+abline(v=quantile(log10(b$length))[2:4], lwd=3, lty=2 )
+# 0%   25%   50%   75%  100% 
+# 1    96   309   784 76180 
 
 
 

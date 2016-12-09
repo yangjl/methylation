@@ -105,7 +105,7 @@ mplot <- function(res, burnin=0.25, rates=c(1E7,1E8,1E6)){
     message(sprintf("posterior mu [ %s ], nu [ %s ] and s [ %s ]", mode.mu, mode.nu, mode.s))
     plot_grid(mtrace,ntrace,strace,muplot,nuplot,splot,muplotzoom,nuplotzoom,splotzoom,
               ncol=3,rel_heights=c(1.5,1,1), align="v")
-    
+    return(c(mode.mu, mode.nu, mode.s))
 }
 
 sfsplot <- function(res, burnin=0.2,rates=c(1E8,1E8,1E8), sfsplot=NULL, Ne=150000, k=0:40){
