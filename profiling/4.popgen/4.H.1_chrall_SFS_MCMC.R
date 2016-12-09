@@ -19,9 +19,11 @@ b <- read.csv("cache/SFS_comet_blocks_CG.csv")
 # 0%   25%   50%   75%  100% 
 # 1    96   309   784 76180 
 
-output <- data.frame()
+myi <- JOBID
 
-for(myi in 1:5){
+
+runmcmc <- function(myi, b){
+    output <- data.frame()
     rdat_id <- paste0("pres", myi)
     if(myi == 1){
         ### using all data
@@ -34,7 +36,7 @@ for(myi in 1:5){
     }
     
     if(myi == 3){
-        b0 <- subset(b, length < quantile(b$length)[2] & length <= quantile(b$length)3])
+        b0 <- subset(b, length < quantile(b$length)[2] & length <= quantile(b$length)[3])
         temp <- data.frame(type="CG", region="GW", size="0.25-0.5", bin="COMET", rdat=rdat_id)
     }
     
@@ -62,6 +64,9 @@ for(myi in 1:5){
     output <- rbind(output, temp)
     
 }
+    
+    
+
 
 ################################################################
 dt <- as.data.table(b)
@@ -105,7 +110,7 @@ for(myi in 6:10){
     
 }
 
-save(list=c("output", output$rdat), file="largedata/mcmc_CG_GW.RData")
+save(list=c("output", output$rdat), file="largedata/lcache/mcmc_CG_GW.RData")
 
 
 
