@@ -33,24 +33,13 @@ df$length <- df$end - df$start + 1
 write.table(df, "cache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
-#####>>> read from cache/
-df <- read.csv("cache/SFS_comet_blocks_CG.csv")
-dt <- as.data.table(df)
-tab1 <- dt[, .(bp = sum(length)), by= sfs] 
-tab2 <- data.frame(table(df$sfs))
 
-tab1 <- as.data.frame(tab1)
-plot(tab1$sfs, tab1$bp, type="h")
-tab <- merge(tab1, tab2, by.x="sfs", by.y="Var1")
-
-tab$bp <- tab$bp/sum(tab$bp)
-tab$Freq <- tab$Freq/sum(tab$Freq)
-
-barplot(t(tab[, 2:3]), names=tab$sfs, beside=TRUE, xlab="Number of Individuals", ylab="Freq")
-
-
-
-
+####### plot
+b <- read.csv("cache/SFS_comet_blocks_CG.csv")
+hist(log10(b$length), xlab="COMET Length log10(bp)", main="CG COMETs", col="#cdc0b0")
+abline(v=quantile(log10(b$length))[2:4], lwd=3, lty=2 )
+# 0%   25%   50%   75%  100% 
+# 1    96   309   784 76180 
 
 
 
