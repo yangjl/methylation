@@ -13,6 +13,7 @@ JOBID <- as.numeric(as.character(args[1]))
 print(JOBID)
 
 dirs <- dir(path="largedata/COMET_CHG", pattern="JR", full.names=TRUE, recursive=FALSE)
+file1 <- file1[c(9,10,16)] #for the unfinished ones
 
 setwd(dirs[JOBID])
 system("sh 1.COMETgazer.sh")

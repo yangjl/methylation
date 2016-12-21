@@ -25,7 +25,7 @@ for(i in 1:length(dirs)){
 
 
 library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:20, out=1), outdir="slurm-script", cmdno=1,
+run_Rcodes(inputdf=data.frame(file=1:3, out=1), outdir="slurm-script", cmdno=1,
            rcodes = "profiling/3.DMR/3.B.2_COMMETgazer_CHG.R",
            arrayshid = "slurm-script/run_chg_rgazer_array.sh",
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 2, "16G"))
