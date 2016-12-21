@@ -31,4 +31,4 @@ run_Rcodes(inputdf=data.frame(file=1:3, out=1), outdir="slurm-script", cmdno=1,
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 2, "16G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-####>>> sbatch -p bigmemm --mem 16G --ntasks=2 --time 1000:00:00 slurm-script/run_chg_rgazer_array.sh
+####>>> sbatch -p bigmemh --mem 16G --ntasks=2 --time 100:00:00 slurm-script/run_chg_rgazer_array.sh
