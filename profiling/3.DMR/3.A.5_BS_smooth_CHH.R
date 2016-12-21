@@ -77,8 +77,16 @@ runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="l
 #runbsmooth(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="largedata/COMET", 
 #           cores=1, chrs=10, BIN=1000000)
 
-## CG
+## CHH
 file1 <- list.files(path="largedata/wgbs_smoothed", pattern="chh.rc$", full.names = TRUE)
-runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=1:10, BIN=1000000)
+
+myid <- gsub(".*/|_.*", "", file1[JOBID])
+out <- list.files(path=paste0("largedata/COMET_CHH/", myid), pattern="chr", full.names = TRUE)
+
+if(length(out) > 0){
+    runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=length(out):10, BIN=1000000)
+}else{
+    runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=1:10, BIN=1000000)
+}
 
 #runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=5, chrs=5, BIN=1000000)
