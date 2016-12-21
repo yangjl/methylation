@@ -2,8 +2,15 @@
 ### 10-12-2016
 ### COMET summary statistics
 
-cat_comet <- function(){
-    dirs <- dir(path="largedata/COMET", pattern="JR", full.names=TRUE, recursive=FALSE)
+cat_comet <- function(path="largedata/COMET", outdir="largedata/COMET/CG_COMET/"){
+    dirs <- dir(path=path, pattern="JR", full.names=TRUE, recursive=FALSE)
+    ### checking the status
+    for(i in 1:length(dirs)){
+        files <- list.files(path=paste0(dirs[i], "/COMETs"), pattern="txt", full.names=TRUE)
+        if(length(files) < 10){
+            message(sprintf("###>>>> [ %s ] not finished smoothing!", dirs[i]))
+        }
+    }
     
     for(i in 1:length(dirs)){
         
@@ -20,14 +27,16 @@ cat_comet <- function(){
         out[out$meth <= 0.33, ]$level <- "low"
         
         message(sprintf("###>>> writing [ %s ] ...", sid))
-        write.table(out, paste0("largedata/COMET/CG_COMET/", sid, "_CG_COMET.csv"), 
+        write.table(out, paste0(outdir, sid, "_COMET.csv"), 
                     sep=",", row.names=FALSE, quote=FALSE)
     }
 }
 
 ##########
-cat_comet()
-
+### CG
+cat_comet(path="largedata/COMET", outdir="largedata/COMET/CG_COMET/")
+### CHG
+cat_comet(path="largedata/COMET_CHG", outdir="largedata/COMET_CHG/CHG_COMET/")
 
 get_sum <- function(){
     files <- list.files(path="largedata/COMET/CG_COMET", pattern="csv", full.names=T)
