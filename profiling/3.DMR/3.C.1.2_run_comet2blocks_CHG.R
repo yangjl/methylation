@@ -11,10 +11,10 @@ source("lib/comet2blocks.R")
 library(mixtools)
 
 
-files <- list.files(path="largedata/COMET/CHG_COMET", pattern="COMET.csv", full.names=T)
+files <- list.files(path="largedata/COMET_CHG/CHG_COMET", pattern="COMET.csv", full.names=T)
 res <- data.frame()
 for(myi in 1:10){
-    out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=NULL)
+    out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=c(0.2, 0.6))
     #out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=c(0.2, 0.7))
     res <- rbind(out, res)
 }
