@@ -23,7 +23,7 @@ write.table(out, "largedata/COMET/CG_COMET/chrall_comet_blocks.csv", sep=",", ro
     
 
 ################ 
-res <- fread("largedata/COMET/CG_COMET/chrall_comet_blocks.csv", data.table=FALSE)
+res <- fread("largedata/COMET_CHG/CHG_COMET/chrall_comet_blocks.csv", data.table=FALSE)
 
 df <- res[, 1:2]
 df$sfs <- apply(res[,-1:-2], 1, sum)
