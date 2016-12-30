@@ -43,3 +43,6 @@ for(i in 2:20){
 
 write.table(out, "cache/chg_cutoff.csv", sep=",", row.names=FALSE, quote=FALSE)
 
+cutoff <- read.csv("cache/chg_cutoff.csv")
+
+
