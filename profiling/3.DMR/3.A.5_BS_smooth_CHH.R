@@ -83,8 +83,10 @@ file1 <- list.files(path="largedata/wgbs_smoothed", pattern="chh.rc$", full.name
 myid <- gsub(".*/|_.*", "", file1[JOBID])
 out <- list.files(path=paste0("largedata/COMET_CHH/", myid), pattern="chr", full.names = TRUE)
 
-if(length(out) > 0){
-    runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=length(out):10, BIN=1000000)
+if(length(out) == 10){
+    stop("finsih!!!")
+}else if(length(out) > 0 & length(out) != 10){
+    runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=(length(out)+1):10, BIN=1000000)
 }else{
     runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=1:10, BIN=1000000)
 }
