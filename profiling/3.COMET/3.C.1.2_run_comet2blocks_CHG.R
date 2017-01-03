@@ -20,30 +20,17 @@ for(myi in 5:10){
     write.table(out, outfile, sep=",", row.names=FALSE, quote=FALSE)
 }
 
-    
 
 
 
+################ get SFS of CHG
+comet <- data.frame()    
+for(i in 1:10){
+    chr <- read.csv(paste0("largedata/COMET_CHG/chg_comet_blocks_chr", i, ".csv"))
+    comet <- rbind(comet, chr)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-################ 
-res <- fread("largedata/COMET_CHG/CHG_COMET/chrall_comet_blocks.csv", data.table=FALSE)
+res <- comet
 
 df <- res[, 1:2]
 df$sfs <- apply(res[,-1:-2], 1, sum)
@@ -51,7 +38,7 @@ df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
 df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
 df$length <- df$end - df$start + 1
 
-write.table(df, "cache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(df, "cache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
 
