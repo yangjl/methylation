@@ -13,7 +13,7 @@ library(mixtools)
 
 files <- list.files(path="largedata/COMET_CHG/CHG_COMET", pattern="COMET.csv", full.names=T)
 #res <- data.frame()
-for(myi in 2:10){
+for(myi in 5:10){
     out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=c(0.2, 0.6))
     #out <- comet2blocks(files, chri=myi, collapse=TRUE, verbose=T, cutoff=c(0.2, 0.7))
     outfile <- paste0("largedata/COMET_CHG/chg_comet_blocks_chr", myi, ".csv")
@@ -21,6 +21,26 @@ for(myi in 2:10){
 }
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ################ 
 res <- fread("largedata/COMET_CHG/CHG_COMET/chrall_comet_blocks.csv", data.table=FALSE)
