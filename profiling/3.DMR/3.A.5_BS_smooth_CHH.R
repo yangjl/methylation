@@ -12,7 +12,6 @@ print(JOBID)
 ### start running
 library(data.table)
 library(bsseq)
-
 runbsmooth <- function(infile="largedata/wgbs_smoothed/JRA1_pe.cg.rc", outdir="largedata/COMET",
                        cores=8, chrs=1:10, BIN){
     
@@ -84,7 +83,7 @@ myid <- gsub(".*/|_.*", "", file1[JOBID])
 out <- list.files(path=paste0("largedata/COMET_CHH/", myid), pattern="chr", full.names = TRUE)
 
 if(length(out) == 10){
-    stop("finsih!!!")
+    stop(">>> finsih!!!")
 }else if(length(out) > 0 & length(out) != 10){
     runbsmooth(infile=file1[JOBID], outdir="largedata/COMET_CHH", cores=1, chrs=(length(out)+1):10, BIN=1000000)
 }else{
