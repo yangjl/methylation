@@ -95,10 +95,10 @@ df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
 df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
 df$length <- df$end - df$start + 1
 
-write.table(df, "cache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(df, "largedata/lcache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 ##################################################
-df <- read.csv("cache/SFS_comet_blocks_CHG.csv")
+df <- read.csv("largedata/lcache/SFS_comet_blocks_CHG.csv")
 df$chr <- gsub("chr", "", df$chr)
 
 gff <- fread("~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", header=TRUE, data.table=FALSE)

@@ -15,6 +15,8 @@ library(data.table)
 
 
 run_mcmc <- function(myi, b){
+    ## myi: split by JOBID
+    ## b: basepair? size of the COMET?
     output <- data.frame()
     if(myi > 10) stop("[run_mcmc] error! [myi=%s] should not > 10!", myi)
     
@@ -114,7 +116,7 @@ run_mcmc <- function(myi, b){
 }
     
 ###### main codes:    
-b <- read.csv("cache/SFS_comet_blocks_CG.csv")
+b <- read.csv("largedata/lcache/SFS_comet_blocks_CG.csv")
 #hist(log10(b$length), xlab="COMET Length log10(bp)", main="CG COMETs", col="#cdc0b0")
 #abline(v=quantile(log10(b$length))[2:4], lwd=3, lty=2 )
 # 0%   25%   50%   75%  100% 
