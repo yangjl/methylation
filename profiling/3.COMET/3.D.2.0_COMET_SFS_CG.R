@@ -90,48 +90,11 @@ names(repeats) <- c("seqname", "source", "feature", "start", "end", "score",
                     "strand", "frame", "attribute")
 repeats$class <- gsub(".*type=|;name=.*", "", repeats$attribute)
 ################ get SFS of CG
+
+
+######
 library("data.table")
-comet <- fread("largedata/COMET/CG_COMET/chrall_comet_blocks.csv", data.table=F)
-
-res <- comet
-df <- res[, 1:2]
-df$sfs <- apply(res[,-1:-2], 1, sum)
-df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
-df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
-df$length <- df$end - df$start + 1
-
-write.table(df, "largedata/lcache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
-
-######
-ob <- load("largedata/chr10_comet.RData")
-# vout0:low; vout2:high; vout3:variable
-
-
-
-
-############
-res0 <- get_overlap(myquery=vout0, gff, repeats)
-res0$type <- "low"
-res2 <- get_overlap(myquery=vout2, gff, repeats)
-res2$type <- "high"
-res3 <- get_overlap(myquery=vout3, gff, repeats)
-res3$type <- "variable"
-    
-res <- rbind(res0, res2, res3)
-res$tot <- apply(res[, 1:6], 1, sum)
-write.table(res, "cache/feature_chr10.csv", sep=",", row.names=FALSE, quote=FALSE)
-
-out <- res
-out$exon <- with(out, exon/tot)
-out$intron <- with(out, intron/tot)
-out$onek <- with(out, onek/tot)
-out$c1 <- with(out, c1/tot)
-out$c2 <- with(out, c2/tot)
-out$c3 <- with(out, c3/tot)
-
-
-######
-df <- read.csv("cache/SFS_comet_blocks_CG.csv")
+df <- read.csv("largedata/lcache/SFS_comet_blocks_CG.csv")
 df$chr <- gsub("chr", "", df$chr)
 
 out <- data.frame()
@@ -142,46 +105,7 @@ for(sitei in 0:40){
     out <- rbind(out, tmp)
 }
 
-write.table(out, "cache/SFS_comet_features.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(out, "cache/SFS_comet_features_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
-######### plots
-#####>>> read from cache/
-df <- read.csv("cache/SFS_comet_blocks_CG.csv")
-dt <- as.data.table(df)
-tab1 <- dt[, .(bp = sum(length)), by= sfs] 
-tab2 <- data.frame(table(df$sfs))
-
-tab1 <- as.data.frame(tab1)
-plot(tab1$sfs, tab1$bp, type="h")
-tab <- merge(tab1, tab2, by.x="sfs", by.y="Var1")
-
-tab$bp <- tab$bp/sum(tab$bp)
-tab$Freq <- tab$Freq/sum(tab$Freq)
-
-pdf("graphs/sfs_sites_bp.pdf", width=8, height=4)
-barplot(t(tab[, 2:3]), names=tab$sfs, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="SFS")
-dev.off()
-
-
-tab <- read.csv("cache/SFS_comet_features.csv")
-tab$exon <- tab$exon/sum(tab$exon)
-tab$intron <- tab$intron/sum(tab$intron)
-tab$onek <- tab$onek/sum(tab$onek)
-
-pdf("graphs/sfs_gene_features.pdf", width=8, height=4)
-barplot(t(tab[, 1:3]), names=tab$site, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="Genic Features")
-dev.off()
-
-tab <- read.csv("cache/SFS_comet_features.csv")
-tab$c1 <- tab$c1/sum(tab$c1)
-tab$c2 <- tab$c2/sum(tab$c2)
-tab$c3 <- tab$c3/sum(tab$c3)
-
-pdf("graphs/sfs_transposon.pdf", width=8, height=4)
-barplot(t(tab[, 4:6]), names=tab$site, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="Transposon")
-dev.off()
 
