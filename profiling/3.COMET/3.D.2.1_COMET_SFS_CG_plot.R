@@ -13,7 +13,7 @@ cbPalette=c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#
 
 ###################################################################################################
 ### SFS and bp
-df <- read.csv("cache/SFS_comet_blocks_CG.csv")
+df <- read.csv("largedata/lcache/SFS_comet_blocks_CG.csv")
 dt <- as.data.table(df)
 tab1 <- dt[, .(bp = sum(length)), by= sfs] 
 tab2 <- data.frame(table(df$sfs))

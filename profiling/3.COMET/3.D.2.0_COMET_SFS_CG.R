@@ -79,11 +79,8 @@ get_overlap <- function(myquery=vout0, gff, repeats){
     return(res)
 }
 
-######
-ob <- load("largedata/chr10_comet.RData")
-# vout0:low; vout2:high; vout3:variable
 
-
+############## get annotation
 gff <- fread("~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", header=TRUE, data.table=FALSE)
 names(gff) <- c("seqname", "source", "feature", "start", "end", "score",
                 "strand", "frame", "attribute")
@@ -92,6 +89,25 @@ repeats <- fread("~/dbcenter/AGP/AGPv2/repeats/ZmB73_5a_MIPS_repeats.gff", heade
 names(repeats) <- c("seqname", "source", "feature", "start", "end", "score",
                     "strand", "frame", "attribute")
 repeats$class <- gsub(".*type=|;name=.*", "", repeats$attribute)
+################ get SFS of CG
+library("data.table")
+comet <- fread("largedata/COMET/CG_COMET/chrall_comet_blocks.csv", data.table=F)
+
+res <- comet
+df <- res[, 1:2]
+df$sfs <- apply(res[,-1:-2], 1, sum)
+df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
+df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
+df$length <- df$end - df$start + 1
+
+write.table(df, "largedata/lcache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+######
+ob <- load("largedata/chr10_comet.RData")
+# vout0:low; vout2:high; vout3:variable
+
+
+
 
 ############
 res0 <- get_overlap(myquery=vout0, gff, repeats)

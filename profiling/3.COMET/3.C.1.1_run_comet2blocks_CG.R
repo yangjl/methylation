@@ -18,7 +18,7 @@ for(myi in 1:10){
     res <- rbind(out, res)
 }
 
-write.table(out, "largedata/COMET/CG_COMET/chrall_comet_blocks.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(res, "largedata/COMET/CG_COMET/chrall_comet_blocks.csv", sep=",", row.names=FALSE, quote=FALSE)
     
 
 ################ 
@@ -30,7 +30,7 @@ df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
 df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
 df$length <- df$end - df$start + 1
 
-write.table(df, "cache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(df, "largedata/lcache/SFS_comet_blocks_CG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
 
