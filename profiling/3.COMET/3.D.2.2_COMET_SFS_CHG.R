@@ -95,10 +95,10 @@ df$start <- as.numeric(as.character(gsub("_.*", "", df$bid)))
 df$end <- as.numeric(as.character(gsub(".*_", "", df$bid)))
 df$length <- df$end - df$start + 1
 
-write.table(df, "cache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
+write.table(df, "largedata/lcache/SFS_comet_blocks_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 ##################################################
-df <- read.csv("cache/SFS_comet_blocks_CHG.csv")
+df <- read.csv("largedata/lcache/SFS_comet_blocks_CHG.csv")
 df$chr <- gsub("chr", "", df$chr)
 
 gff <- fread("~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", header=TRUE, data.table=FALSE)
@@ -119,45 +119,4 @@ for(sitei in 0:40){
 }
 
 write.table(out, "cache/SFS_comet_features_CHG.csv", sep=",", row.names=FALSE, quote=FALSE)
-
-
-######### plots
-#####>>> read from cache/
-df <- read.csv("cache/SFS_comet_blocks_CG.csv")
-dt <- as.data.table(df)
-tab1 <- dt[, .(bp = sum(length)), by= sfs] 
-tab2 <- data.frame(table(df$sfs))
-
-tab1 <- as.data.frame(tab1)
-plot(tab1$sfs, tab1$bp, type="h")
-tab <- merge(tab1, tab2, by.x="sfs", by.y="Var1")
-
-tab$bp <- tab$bp/sum(tab$bp)
-tab$Freq <- tab$Freq/sum(tab$Freq)
-
-pdf("graphs/sfs_sites_bp.pdf", width=8, height=4)
-barplot(t(tab[, 2:3]), names=tab$sfs, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="SFS")
-dev.off()
-
-
-tab <- read.csv("cache/SFS_comet_features.csv")
-tab$exon <- tab$exon/sum(tab$exon)
-tab$intron <- tab$intron/sum(tab$intron)
-tab$onek <- tab$onek/sum(tab$onek)
-
-pdf("graphs/sfs_gene_features.pdf", width=8, height=4)
-barplot(t(tab[, 1:3]), names=tab$site, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="Genic Features")
-dev.off()
-
-tab <- read.csv("cache/SFS_comet_features.csv")
-tab$c1 <- tab$c1/sum(tab$c1)
-tab$c2 <- tab$c2/sum(tab$c2)
-tab$c3 <- tab$c3/sum(tab$c3)
-
-pdf("graphs/sfs_transposon.pdf", width=8, height=4)
-barplot(t(tab[, 4:6]), names=tab$site, beside=TRUE, 
-        xlab="Number of Individuals", ylab="Freq", main="Transposon")
-dev.off()
 
