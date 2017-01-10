@@ -33,15 +33,17 @@ run_overlap_MCMC <- function(df, gff, fea, runid, outdir){
     out <- get_overlap_sfs(grf, grc, df)
     # If acceptance too high, increase these values to explore wider space. If acceptance too low, decrease.
     res <- MCMCBC(my_sfs=out$Freq, rates=c(1E8,1E8,1E8), sd=c(0.05,0.05,0.05), k=0:40,
-                  conditional=FALSE, Ne=150000, ngen=100000, verbose=FALSE)
+                  conditional=FALSE, Ne=150000, ngen=100000, verbose=TRUE)
     d <- mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8))
     
-    runid <- res
+    outrd <- paste0(outdir, "/", runid, ".RData")
+    outfile <- paste0(outdir, "/", runid, ".csv")
     output <- data.frame(id=runid, mu=d[1], nu=d[2], s=d[3], feature=fea)
+    #runid <- res
     
-    save(list=c("output", runid), file=paste0(outdir, "/", runid, ".RData"))
-    write.table(output, paste0(outdir, "/", runid,".csv"), sep=",", row.names=FALSE, quote=FALSE)
-    return(res)
+    save(list=c("output", "res", "d"), file=outfile)
+    write.table(output, outfile, sep=",", row.names=FALSE, quote=FALSE)
+    #return(res)
 }
 
 ####################################################################
