@@ -26,6 +26,14 @@ fit3 <- lm(s ~ context + feature + q, data = out )
 
 anova(fit3)
 
+fit31 <- lm(mu ~ context, data = out)
+anova(fit31)
+
+fit32 <- lm(mu ~ feature, data = out)
+anova(fit32)
+
+fit33 <- lm(mu ~ q, data = out)
+anova(fit33)
 
 fit4 <- lm(nu ~ mu + context + feature + q, data = out )
 anova(fit4)
