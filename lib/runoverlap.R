@@ -41,7 +41,7 @@ run_overlap_MCMC <- function(df, gff, fea, runid, outdir){
     output <- data.frame(id=runid, mu=d[1], nu=d[2], s=d[3], feature=fea)
     #runid <- res
     
-    save(list=c("output", "res", "d"), file=outfile)
+    save(list=c("output", "res", "d"), file=outrd)
     write.table(output, outfile, sep=",", row.names=FALSE, quote=FALSE)
     #return(res)
 }
