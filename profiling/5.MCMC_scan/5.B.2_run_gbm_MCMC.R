@@ -20,11 +20,11 @@ a$TE <- "no"
 write.table(a, "largedata/gbody_type.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:24, out=1:24), outdir="slurm-script", cmdno=1,
-           rcodes = "profiling/4.popgen/4.H.3_overlap_MCMC.R",
+run_Rcodes(inputdf=data.frame(file=1:64, out=1:64), outdir="slurm-script", cmdno=1,
+           rcodes = "profiling/5.MCMC_scan/5.B.1_gbm_overlap_MCMC.R",
            arrayshid = "slurm-script/run_mcmc_64.sh",
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem6 --time 24:00:00 slurm-script/run_mcmc_24.sh
+###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_64.sh
 

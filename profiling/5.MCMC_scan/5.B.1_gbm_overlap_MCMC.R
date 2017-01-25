@@ -77,7 +77,7 @@ run1mcmc <- function(JOBID, typefile="largedata/type.csv"){
             gff$geneid <- gsub(".*=", "", gff$geneid)
             ####
             ngbM <- subset(res, mm <= 0.6)
-            gff <- subset(gff, geneid %in% gbM$geneid)
+            gff <- subset(gff, geneid %in% ngbM$geneid)
         }
         
     }
