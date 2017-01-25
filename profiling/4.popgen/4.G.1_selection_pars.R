@@ -15,7 +15,9 @@ out$nes <- 150000*out$s
 out$context <- gsub("_.*", "", out$id)
 out$q <- paste("q", gsub(".*_", "", out$id), sep="")
 
+write.csv(out, "reports/popgen_pars.csv")
 
+out <- read.csv("reports/popgen_pars.csv")
 fit1 <- lm(mu ~ context + feature + q, data = out )
 anova(fit1)
 
