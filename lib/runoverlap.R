@@ -1,9 +1,10 @@
 
 ### find COMET overlap with features and then run MCMC for the feature SFS
-run_overlap_MCMC <- function(df, gff, fea, runid, outdir){
+run_overlap_MCMC <- function(df, gff, fea, runid, outdir, outid){
     # df:
     # gff: genomic feature
     # feature: vector [exon, intron, gene, Class I Retroelements, etc.]
+    # runid: numeric number 1-n
     # outdir: "largedata/lcache/"
     
     ###################################################
@@ -11,12 +12,12 @@ run_overlap_MCMC <- function(df, gff, fea, runid, outdir){
     #myquery$chr <- gsub("chr", "", myquery$chr)
     grc <- with(df, GRanges(seqnames=chr, IRanges(start=start, end=end), cid=cid))
     
-    if(fea != "gene"){
+    if(fea != "up1k"){
         ### gene features: exon
         f <- subset(gff, feature %in% fea)
         grf <- with(f, GRanges(seqnames=seqname, IRanges(start=start, end=end) ))
         
-    }else if (fea == "gene"){
+    }else if (fea == "up1k"){
         ### upstream 1kb regions
         p <- subset(gff, feature %in% "gene" & strand %in% "+")
         p$end <- p$start - 1
@@ -36,8 +37,8 @@ run_overlap_MCMC <- function(df, gff, fea, runid, outdir){
                   conditional=FALSE, Ne=150000, ngen=100000, verbose=TRUE)
     d <- mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8))
     
-    outrd <- paste0(outdir, "/", runid, ".RData")
-    outfile <- paste0(outdir, "/", runid, ".csv")
+    outrd <- paste0(outdir, "/", outid, "_", runid, ".RData")
+    outfile <- paste0(outdir, "/", outid, "_", runid, ".csv")
     output <- data.frame(id=runid, mu=d[1], nu=d[2], s=d[3], feature=fea)
     #runid <- res
     
