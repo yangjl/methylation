@@ -63,7 +63,14 @@ get_overlap_sfs <- function(grf, grc, df){
     sfs <- as.data.frame(table(df1$sfs))
     message(sprintf("[get_overlap_sfs]: [ %s ] sites of [ %s ] rows ", sum(sfs[,2]), nrow(sfs)))
     if(nrow(sfs) != 41){
-        stop("[get_overlap_sfs]: not 41 sites!")
+        message("[get_overlap_sfs]: not 41 sites!")
+        
+        temsfs <- data.frame(Var1=0:40, Freq=0)
+        sfs <- rbind(sfs, temsfs)
+        sfs <- sfs[order(sfs$Var1, sfs$Freq, decreasing=TRUE), ]
+        sfs <- sfs[!duplicated(sfs$Var1), ]
+        return(sfs[order(sfs$Var1), ])
+        
     }else{
         return(sfs)
     }

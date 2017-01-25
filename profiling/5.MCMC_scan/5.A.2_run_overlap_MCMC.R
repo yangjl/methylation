@@ -5,7 +5,7 @@
 ## context
 type <- c("CG", "CHG", "CHH")
 ## gene means 1kb upstream
-fs <- c("exon", "intron", "gene")
+fs <- c("exon", "intron", "gene", "up1k")
 ## COMET length
 ln <- 1:4
 

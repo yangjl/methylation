@@ -48,6 +48,8 @@ run1mcmc <- function(JOBID, typefile="largedata/type.csv"){
         df <- subset(df, length > qt[3] & length <= qt[4])
     }else if(mya$length == 4){
         df <- subset(df, length > qt[4])
+    }else if(mya$length == 0){
+        df <- df
     }
     
     
