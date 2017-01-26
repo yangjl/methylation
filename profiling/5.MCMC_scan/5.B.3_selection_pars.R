@@ -10,7 +10,7 @@ for(i in 1:length(files)){
    out <- rbind(out, tb)
 }
 
-out$nes <- 150000*out$s
+out$nes <- 2*150000*out$s
 
 out$context <- gsub("_.*", "", out$id)
 out$q <- paste("q", gsub(".*_", "", out$id), sep="")
