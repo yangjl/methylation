@@ -23,5 +23,6 @@ geneset <- read.csv("cache/geneset_rnaseq.csv")
 names(geneset)[c(2,4)] <- c("geneid", "value")
 
 set.seed(12345679)
-run1mcmc(JOBID, typefile="largedata/rpkm_mean_type.csv", geneset, cutoff=median(geneset$value), outid="rpkm_mean")
+run_mcmc_bygeneset(JOBID, typefile="largedata/rpkm_mean_type.csv", geneset, 
+                   cutoff=median(geneset$value), outid="rpkm_mean")
 
