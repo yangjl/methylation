@@ -42,28 +42,30 @@ run_mcmc_bygeneset <- function(JOBID, typefile="largedata/type.csv", geneset, cu
         repeats$class <- gsub(".*type=|;name=.*", "", repeats$attribute)
         gff <- repeats
     }else if(mya$TE == "no"){
-        ######## format GFF and repeat files
-        gff <- fread("~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", header=TRUE, data.table=FALSE)
-        names(gff) <- c("seqname", "source", "feature", "start", "end", "score",
-                        "strand", "frame", "attribute")
         
-        if(mya$gset == "above"){
-            #res <- read.csv("cache/stat_exon_mean_var.csv")
-            gff$geneid <- gsub(";.*|_.*", "", gff$attribute)
-            gff$geneid <- gsub(".*=", "", gff$geneid)
-            ####
-            g1 <- subset(geneset, value > cutoff)
-            gff <- subset(gff, geneid %in% g1$geneid)
+        if(!is.null(mya$gset)){
+            ######## format GFF and repeat files
+            gff <- fread("~/dbcenter/AGP/AGPv2/ZmB73_5b_FGS.gff", header=TRUE, data.table=FALSE)
+            names(gff) <- c("seqname", "source", "feature", "start", "end", "score",
+                            "strand", "frame", "attribute")
             
-        }else if(mya$gset == "below"){
-            #res <- read.csv("cache/stat_exon_mean_var.csv")
-            gff$geneid <- gsub(";.*|_.*", "", gff$attribute)
-            gff$geneid <- gsub(".*=", "", gff$geneid)
-            ####
-            g2 <- subset(geneset, value <= cutoff)
-            gff <- subset(gff, geneid %in% g2$geneid)
+            if(mya$gset == "above"){
+                #res <- read.csv("cache/stat_exon_mean_var.csv")
+                gff$geneid <- gsub(";.*|_.*", "", gff$attribute)
+                gff$geneid <- gsub(".*=", "", gff$geneid)
+                ####
+                g1 <- subset(geneset, value > cutoff)
+                gff <- subset(gff, geneid %in% g1$geneid)
+                
+            }else if(mya$gset == "below"){
+                #res <- read.csv("cache/stat_exon_mean_var.csv")
+                gff$geneid <- gsub(";.*|_.*", "", gff$attribute)
+                gff$geneid <- gsub(".*=", "", gff$geneid)
+                ####
+                g2 <- subset(geneset, value <= cutoff)
+                gff <- subset(gff, geneid %in% g2$geneid)
+            }
         }
-        
     }
     
     ##########
