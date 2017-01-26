@@ -1,17 +1,38 @@
 
+
+
+
+
+
+
+
+outall <- read.csv("reports/gbody_popgen_pars.csv")
+fit1 <- lm(nes ~ context + feature + q, data = outall )
+anova(fit1)
+
+fit2 <- lm(mu ~ context + feature + q, data = outall )
+anova(fit2)
+
+fit3 <- lm(nu ~ context + feature + q, data = outall )
+anova(fit3)
+
+fit4 <- lm(nu ~ mu + context + feature + q, data = outall ) 
+anova(fit4)
+
 library(ggplot2)
-source("lib/multiplot.R")
+library(cowplot)
 
 plot_fig3ab <- function(outfile, getpdf){
-    out <- read.csv("reports/gbody_popgen_pars.csv")
+    outall <- read.csv("reports/gbody_popgen_pars.csv")
     
+    out <- subset(outall, q %in% "qngbm")
     fsize=16
     p1 <- ggplot(out, aes(x=factor(feature), y= -log10(mu),
                            fill=factor(context, levels=c("CG", "CHG"), labels=c("CG", "CHG")))) + 
         geom_bar(position=position_dodge(), stat="identity") +
         xlab("") +
         #ylim(c(0,1)) +
-        ylab("mu") +
+        ylab("-log10(mu)") +
         ggtitle("") + theme_bw() +
         labs(fill="Context") +
         theme(axis.text = element_text(angle = 90, hjust = 1, size=fsize),
@@ -24,7 +45,7 @@ plot_fig3ab <- function(outfile, getpdf){
         geom_bar(position=position_dodge(), stat="identity") +
         xlab("") +
         #ylim(c(0,1)) +
-        ylab("nu") +
+        ylab("-log10(nu)") +
         ggtitle("") + theme_bw() +
         labs(fill="Context") +
         theme(axis.text = element_text(angle = 90, hjust = 1, size=fsize),
@@ -45,7 +66,8 @@ plot_fig3ab <- function(outfile, getpdf){
               legend.title = element_text(size=fsize, face="bold"),
               legend.text = element_text(size=fsize))
     
-    
+    #PLOT
+    plot_grid(p1, p2, p3, ncol=3, rel_heights=c(1,1,1), align="h", labels =c("D", "E", "F"))
 }
 ######
 plot_fig3ab(outfile="graphs/Fig_post_var.pdf", getpdf)

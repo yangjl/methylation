@@ -13,11 +13,16 @@ for(i in 1:length(files)){
 out$nes <- 150000*out$s
 
 out$context <- gsub("_.*", "", out$id)
-out$q <- paste("q", gsub(".*_", "", out$id), sep="")
+out$q <- gsub(".*_", "", out$id)
 
-write.csv(out, "reports/gbody_popgen_pars.csv")
+write.csv(out, "reports/rpkm_mean_pars.csv")
 
-out <- read.csv("reports/popgen_pars.csv")
+
+fit1 <- lm(nes ~ context + feature + q, data = out )
+anova(fit1)
+
+
+out <- read.csv("reports/rpkm_mean_pars.csv")
 
 ##########
 files <- list.files(path="largedata/lcache", pattern="rpkm_var.*csv", full.names=TRUE)
@@ -31,8 +36,14 @@ for(i in 1:length(files)){
 out$nes <- 150000*out$s
 
 out$context <- gsub("_.*", "", out$id)
-out$q <- paste("q", gsub(".*_", "", out$id), sep="")
+out$q <- gsub(".*_", "", out$id)
 
-write.csv(out, "reports/gbody_popgen_pars.csv")
+write.csv(out, "reports/rpkm_var_pars.csv")
 
-out <- read.csv("reports/popgen_pars.csv")
+
+fit1 <- lm(nes ~ context + feature + q, data = out )
+anova(fit1)
+
+
+out <- read.csv("reports/rpkm_mean_pars.csv")
+

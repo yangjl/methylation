@@ -2,7 +2,7 @@
 ### Jan 10th, 2017
 
 
-files <- list.files(path="largedata/lcache", pattern="gs_len.*csv", full.names=TRUE)
+files <- list.files(path="largedata/lcache", pattern="^C.*", full.names=TRUE)
 
 out <- data.frame()
 for(i in 1:length(files)){
@@ -10,12 +10,12 @@ for(i in 1:length(files)){
    out <- rbind(out, tb)
 }
 
-out$nes <- 2*150000*out$s
+out$nes <- 150000*out$s
 
 out$context <- gsub("_.*", "", out$id)
 out$q <- paste("q", gsub(".*_", "", out$id), sep="")
 
-write.csv(out, "reports/gbody_popgen_pars.csv")
+write.csv(out, "reports/popgen_pars.csv")
 
 out <- read.csv("reports/popgen_pars.csv")
 fit1 <- lm(mu ~ context + feature + q, data = out )

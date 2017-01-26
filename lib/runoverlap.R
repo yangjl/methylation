@@ -46,7 +46,7 @@ run_overlap_MCMC <- function(df, gff, fea, runid, outdir, outid){
     ### prepare names for results
     outrd <- paste0(outdir, "/", outid, "_", runid, ".RData")
     outfile <- paste0(outdir, "/", outid, "_", runid, ".csv")
-    output <- data.frame(id=runid, mu=d[1], nu=d[2], s=d[3], feature=fea)
+    output <- data.frame(id=runid, mu=d[1], nu=d[2], s=d[3])
     #runid <- res
     
     save(list=c("output", "res", "d"), file=outrd)

@@ -51,4 +51,4 @@ run_Rcodes(inputdf=data.frame(file=1:30, out=1:30), outdir="slurm-script", cmdno
 
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_var_16.sh
+###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_te30.sh
