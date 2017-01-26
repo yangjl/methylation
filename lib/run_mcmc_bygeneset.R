@@ -37,9 +37,10 @@ run_mcmc_bygeneset <- function(JOBID, typefile="largedata/type.csv", geneset, cu
     
     if(mya$TE == "yes"){
         repeats <- fread("~/dbcenter/AGP/AGPv2/repeats/ZmB73_5a_MIPS_repeats.gff", header=FALSE, data.table=FALSE)
-        names(repeats) <- c("seqname", "source", "feature", "start", "end", "score",
+        names(repeats) <- c("seqname", "source", "repeat", "start", "end", "score",
                             "strand", "frame", "attribute")
-        repeats$class <- gsub(".*type=|;name=.*", "", repeats$attribute)
+        
+        repeats$feature <- gsub(".*type=|;name=.*", "", repeats$attribute)
         gff <- repeats
     }else if(mya$TE == "no"){
         

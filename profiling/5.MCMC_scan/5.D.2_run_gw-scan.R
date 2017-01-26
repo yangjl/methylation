@@ -7,10 +7,7 @@ ln <- 0:4
 ## context
 type <- c("CG", "CHG")
 ## gene means 1kb upstream
-fs <- NULL
 
-## MUST: gset
-gset <- NULL
 
 a <- data.frame(length=rep(ln, each=2), type=rep(type, each=1))
 a$id <- paste(a$type, a$length, sep="_")
@@ -29,15 +26,29 @@ run_Rcodes(inputdf=data.frame(file=1:10, out=1:10), outdir="slurm-script", cmdno
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_16.sh
+###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_gs10.sh
 
 
+## COMET length
+ln <- 0:4
+## context
+type <- c("CG", "CHG")
+## gene means 1kb upstream
+fs <- c("Class II/III Transposable Ele", "Class I Retroelements", "Other")
 
+a <- data.frame(length=rep(ln, each=6), type=rep(type, each=3), fs=rep(fs, each=1))
+a$id <- paste(a$type, a$length, a$fs, sep="_")
+a$id <- gsub(" ", "", a$id)
+a$TE <- "yes"
+
+### RPKM mean
+write.table(a, "largedata/te_type.csv", sep=",", row.names=FALSE, quote=FALSE)
 library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:16, out=1:16), outdir="slurm-script", cmdno=1,
-           rcodes = "profiling/5.MCMC_scan/5.C.1_rpkm_MCMC_var.R",
-           arrayshid = "slurm-script/run_mcmc_var_16.sh",
+run_Rcodes(inputdf=data.frame(file=1:30, out=1:30), outdir="slurm-script", cmdno=1,
+           rcodes = "profiling/5.MCMC_scan/5.D.1_te-scan.R",
+           arrayshid = "slurm-script/run_mcmc_te30.sh",
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
+
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
 ###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_var_16.sh
