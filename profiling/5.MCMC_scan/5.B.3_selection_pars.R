@@ -2,7 +2,7 @@
 ### Jan 10th, 2017
 
 
-files <- list.files(path="largedata/lcache", pattern="gs_len.*csv", full.names=TRUE)
+files <- list.files(path="largedata/lcache", pattern="gbody.*csv", full.names=TRUE)
 
 out <- data.frame()
 for(i in 1:length(files)){

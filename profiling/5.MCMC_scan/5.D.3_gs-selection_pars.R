@@ -1,8 +1,19 @@
 ### Jinliang Yang
 ### Jan 10th, 2017
 
+files <- list.files(path="largedata/lcache", pattern="gw_len.*csv", full.names=TRUE)
 
-files <- list.files(path="largedata/lcache", pattern="^C.*", full.names=TRUE)
+out <- data.frame()
+for(i in 1:length(files)){
+    tb <-  read.csv(files[i])
+    out <- rbind(out, tb)
+}
+
+out$nes <- 150000*out$s
+
+
+
+files <- list.files(path="largedata/lcache", pattern="te_len.*csv", full.names=TRUE)
 
 out <- data.frame()
 for(i in 1:length(files)){
@@ -13,9 +24,12 @@ for(i in 1:length(files)){
 out$nes <- 150000*out$s
 
 out$context <- gsub("_.*", "", out$id)
-out$q <- paste("q", gsub(".*_", "", out$id), sep="")
+#out$q <- paste("q", gsub(".*_", "", out$id), sep="")
 
-write.csv(out, "reports/popgen_pars.csv")
+write.csv(out, "reports/te_pars.csv")
+
+
+
 
 out <- read.csv("reports/popgen_pars.csv")
 fit1 <- lm(mu ~ context + feature + q, data = out )

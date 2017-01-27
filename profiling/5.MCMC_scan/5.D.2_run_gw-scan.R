@@ -26,7 +26,7 @@ run_Rcodes(inputdf=data.frame(file=1:10, out=1:10), outdir="slurm-script", cmdno
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem2,bigmem6 --time 24:00:00 slurm-script/run_mcmc_gs10.sh
+###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem3,bigmem6 --time 24:00:00 slurm-script/run_mcmc_gs10.sh
 
 
 ## COMET length
