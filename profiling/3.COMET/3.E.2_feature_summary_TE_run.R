@@ -2,15 +2,22 @@
 ### 12-01-2016
 ### purpose: run BSmoothing
 
-cx <- c("largedata/COMET", "largedata/COMET_CHG", "largedata/COMET_CHH")
-cl <- c("class=I", "class=II")
 
-df <- data.frame(pwd=rep(cx, each=2), type=rep(cl), output=c(1,2), context=rep(c("CG", "CHG", "CHH"), each=2))
-df$output <- paste0("cache/", df$context, "_chr1_TE_class", df$output, ".csv")
+cl <- c("class=I", "class=II")
+pwd <- list.files(path=c("largedata/COMET", "largedata/COMET_CHG", "largedata/COMET_CHH"), 
+                  pattern="^J", full.names = TRUE)
+chr <- "chr1.txt"
+infile <- paste(pwd, chr, sep="/")
+
+
+df <- data.frame(infile=rep(infile, each=2), type=cl, output=c(1,2,3), 
+                 context=rep(c("CHG", "CHH", "CG"), each=40))
+df$output <- paste0("largedata/lcache/", df$context, "_chr1_TE_", df$type, "_",
+                    gsub(".*JR|\\/chr.*", "", df$infile), ".csv")
 # col, pwd="largedata/COMET"
 # col: type="class=I"
 # col: output="cache/CG_chr1_TE_class1.csv"
-write.csv(df, "largedata/run_df.csv")
+write.csv(df, "largedata/run_TE_df.csv")
 
 library("farmeR")
 run_Rcodes(inputdf=data.frame(file=1:6, out=1), outdir="slurm-script", cmdno=1,

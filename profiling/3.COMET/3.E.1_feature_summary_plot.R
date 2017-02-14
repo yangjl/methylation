@@ -4,43 +4,43 @@
 
 ##get command line args
 
-cg <- read.csv("cache/CG_chr1_gff_feas.csv")
+pwd <- list.files(path=c("largedata/lcache"),  pattern="chr1_fea", full.names = TRUE)
+length(pwd)
+out <- data.frame()
+for(i in 1:length(pwd)){
+    tem <- read.csv(pwd[i])
+    tem$fid <- pwd[i]
+    out <- rbind(out, tem)
+}
+out$context <- gsub("cache\\/|_.*", "", out$fid)
+write.table(out, "cache/chrp_feas.csv", sep=",", row.names=FALSE)
 
 
-up1k <- subset(cg, feature %in% "up1k")
-up1k$x <- gsub("V", "", up1k$var)
-up1k$x <- as.numeric(as.character(up1k$x)) - 10
+#############
+d <- read.csv("cache/chrp_feas.csv")
+d$x <- as.numeric(as.character(gsub("V", "", d$var)))
+d$feature <- as.character(d$feature)
 
-
-exon <- subset(cg, feature %in% "exon")
-exon$x <- as.numeric(as.character(gsub("V", "", exon$var)))
-
-intron <- subset(cg, feature %in% "intron")
-intron$x <- gsub("V", "", intron$var)
-intron$x <- as.numeric(as.character(intron$x)) + 10
+d$context <- gsub("largedata\\/|\\/JR.*", "", d$file)
+d[d$context == "COMET",]$context <- "CG"
+d$context <- gsub("COMET_", "", d$context)
 
 
 
-down1k <- subset(cg, feature %in% "down1k")
-down1k$x <- gsub("V", "", down1k$var)
-down1k$x <- as.numeric(as.character(down1k$x)) + 20
+d[d$feature == "exon1st", ]$x <- d[d$feature == "exon1st", ]$x + 10
+d[d$feature == "intron1st", ]$x <- d[d$feature == "intron1st", ]$x + 20
+d[d$feature == "intronlast", ]$x <- d[d$feature == "intronlast", ]$x + 30
+d[d$feature == "exonlast", ]$x <- d[d$feature == "exonlast", ]$x + 40
+d[d$feature == "down1k", ]$x <- d[d$feature == "down1k", ]$x + 50
+
+d <- subset(d, !(feature %in% "gene"))
 
 
-ad <- rbind(up1k, exon, intron, down1k)
 
 
-gene <- subset(cg, feature %in% "gene")
-gene$x <- gsub("V", "", gene$var)
-gene$x <- as.numeric(as.character(gene$x))
 
-ad <- rbind(up1k, gene, down1k)
-plot(ad$x, ad$mc)
-
-ad$context <- "CG"
 
 library(ggplot2)
-library(reshape2)
-source("lib/multiplot.R")
 
 plot_eff <- function(outfile, getpdf){
     
@@ -48,20 +48,29 @@ plot_eff <- function(outfile, getpdf){
     theme_set(theme_grey(base_size = 18)) 
     
     fsize=18
-    p1 <- ggplot(ad, aes(x=x, y=mc, colour=factor(context)) )+
+    p1 <- ggplot(d, aes(x=x, y=mc, colour=factor(context)) )+
         labs(colour="context") +
         theme_bw() +
-        xlab("GERP Score") +
-        ylab("Additive Effect") +
-        #scale_color_manual(values=cols) +
+        xlab("") +
+        ylab("Methylation Level") +
+        #scale_color_manual(values=context) +
         #scale_linetype_manual(values=lty1) +
-        guides(colour=FALSE, linetype=FALSE) +
-        geom_smooth(span = 0.05) +
+        guides(size=FALSE) +
+        geom_smooth(method="loess", span = 0.08, size=2) +
+        #geom_smooth(span = 0.1) +
+        geom_vline(xintercept=c(10, 20, 30, 40, 50), col="black") +
+        #facet_grid(~ feature) +
+        scale_x_continuous(breaks=c(5,15,25,35, 45, 55),
+                           labels=c("Upstream 1kb", "First Exon",
+                                  "First Intron", "Last Intron",
+                                  "Last Exon", "Downstream 1kb")) +
         theme(axis.text.y = element_text(angle = 90, hjust = 1),
+              axis.text.x = element_text(angle = 20, hjust = 0.7),
               axis.text=element_text(size=fsize),
               axis.title=element_text(size=fsize, face="bold"),
               legend.title = element_text(size=fsize, face="bold"),
               legend.text = element_text(size=fsize) )
+    #abline(v=c(10, 20, 30, 40, 50), col="black")
     p1
     
 }
@@ -69,8 +78,3 @@ plot_eff <- function(outfile, getpdf){
 ########
 p <- plot_eff(outfile="graphs/Fig2b_var.pdf", getpdf)
 p
-if(getpdf){
-    pdf("graphs/Fig2b_var.pdf", width=8, height=4)
-    p
-    dev.off()
-}

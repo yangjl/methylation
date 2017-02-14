@@ -81,7 +81,7 @@ find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", TE=FALSE, gff,
         
         grf <- with(lout, GRanges(seqnames=seqname, IRanges(start=start, end=end), v=var))
         
-        message(sprintf("###>>> compute for [sample=%s]", infile))
+        message(sprintf("###>>> compute for [sample=%s] and [feature=%s]", infile, fea))
         for(v in paste0("V", 1:10)){    
             mygrf <- grf[ grf$v %in% v ]
             #######
