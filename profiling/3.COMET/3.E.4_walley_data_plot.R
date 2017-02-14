@@ -24,7 +24,7 @@ d <- read.csv("cache/chrp_exp.csv")
 d$x <- as.numeric(as.character(gsub("V", "", d$var)))
 d$feature <- as.character(d$feature)
 
-d$status <- gsub(".*RNA_|_.*", "", d$fid)
+d$status <- gsub(".*RNA_|.*protein_|_.*", "", d$fid)
 
 
 table(d$status)
@@ -45,7 +45,7 @@ plot_eff <- function(outfile, getpdf){
     theme_set(theme_grey(base_size = 18)) 
     
     fsize=18
-    p1 <- ggplot(d, aes(x=x, y=mc, colour=factor(context)) )+
+    p1 <- ggplot(subset(d, type %in% "RNA"), aes(x=x, y=mc, colour=factor(context)) )+
         labs(colour="context") +
         theme_bw() +
         xlab("") +
@@ -70,7 +70,7 @@ plot_eff <- function(outfile, getpdf){
     #abline(v=c(10, 20, 30, 40, 50), col="black")
     p1
     
-    p2 <- ggplot(d, aes(x=x, y=mc, colour=factor(context)) )+
+    p1 <- ggplot(subset(d, type %in% "protein"), aes(x=x, y=mc, colour=factor(context)) )+
         labs(colour="context") +
         theme_bw() +
         xlab("") +
@@ -82,10 +82,10 @@ plot_eff <- function(outfile, getpdf){
         #geom_smooth(span = 0.1) +
         geom_vline(xintercept=c(1, 10), col="black") +
         facet_grid(~ status) +
-        ylim(0, 0.05) +
-        scale_color_manual(values=c("#56B4E9")) +
+        scale_color_manual(values=c("#8b2323", "#E69F00", "#56B4E9")) +
+        #ylim(0, 0.05) +
         scale_x_continuous(breaks=c(-5, 5, 15),
-                           labels=c("Upstream 1kb", "Chromatin", "Downstream 1kb")) +
+                           labels=c("Upstream 1kb", "Expression", "Downstream 1kb")) +
         theme(axis.text.y = element_text(angle = 90, hjust = 0.5),
               axis.text.x = element_text(angle = 20, hjust = 0.7),
               axis.text=element_text(size=fsize),
@@ -93,7 +93,8 @@ plot_eff <- function(outfile, getpdf){
               legend.title = element_text(size=fsize, face="bold"),
               legend.text = element_text(size=fsize) )
     #abline(v=c(10, 20, 30, 40, 50), col="black")
-    p2
+    p1
+    
 }
 
 ########

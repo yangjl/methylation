@@ -86,5 +86,24 @@ write.table(sfs, "cache/sfs_ngbM_550k.csv", sep=",", row.names=FALSE, quote=FALS
 cg <- as.data.frame(cg)
 sub <- subset(cg, chr == 10)
 
+gbm <- read.csv("cache/sfs_gbM_98k.csv")
+s1 <- ggplot(gbm, aes(x=f, y=Freq)) + geom_bar(stat="identity", position = "dodge") +
+    #theme_bw() +
+    xlab("") +
+    ylab("Frequency") +
+    scale_fill_manual(values="red") +
+    
+    theme(legend.position="top", axis.text=element_text(size=15), axis.title=element_text(size=15) )
+#########
+s1
 
-
+ngbm <- read.csv("cache/sfs_ngbM_550k.csv")
+s2 <- ggplot(ngbm, aes(x=f, y=Freq)) + geom_bar(stat="identity", position = "dodge") +
+    #theme_bw() +
+    xlab("") +
+    ylab("Frequency") +
+    scale_fill_manual(values="red") +
+    theme(legend.position="top", axis.text=element_text(size=15), axis.title=element_text(size=15) )
+#########
+s2
+    
