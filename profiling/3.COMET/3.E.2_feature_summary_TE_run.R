@@ -5,12 +5,12 @@
 cx <- c("largedata/COMET", "largedata/COMET_CHG", "largedata/COMET_CHH")
 cl <- c("class=I", "class=II")
 
-df <- data.frame(pwd=rep(cx, each=2), class=rep(cl), output=c(1,2), context=rep(c("CG", "CHG", "CHH"), each=2))
+df <- data.frame(pwd=rep(cx, each=2), type=rep(cl), output=c(1,2), context=rep(c("CG", "CHG", "CHH"), each=2))
 df$output <- paste0("cache/", df$context, "_chr1_TE_class", df$output, ".csv")
 # col, pwd="largedata/COMET"
 # col: type="class=I"
 # col: output="cache/CG_chr1_TE_class1.csv"
-write.table(df, "largedata/run_df.csv")
+write.csv(df, "largedata/run_df.csv")
 
 library("farmeR")
 run_Rcodes(inputdf=data.frame(file=1:6, out=1), outdir="slurm-script", cmdno=1,

@@ -19,9 +19,9 @@ source("lib/find_cval_gff.R")
 #########################################
 runit <- function(df, id, gff){
     
-    mypwd <- df$pwd[id]
-    mytype <- df$type[id]
-    myout <- df$out[id]
+    mypwd <- as.character(df$pwd[id])
+    mytype <- as.character(df$type[id])
+    myout <- as.character(df$output[id]) 
     
     ####### smoothed files CG
     pwd1 <- list.files(path=mypwd, pattern="^J", full.names = TRUE)
