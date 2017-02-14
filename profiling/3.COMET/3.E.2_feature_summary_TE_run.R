@@ -20,10 +20,10 @@ df$output <- paste0("largedata/lcache/", df$context, "_chr1_TE_", df$type, "_",
 write.csv(df, "largedata/run_TE_df.csv")
 
 library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:6, out=1), outdir="slurm-script", cmdno=1,
+run_Rcodes(inputdf=data.frame(file=1:120, out=1), outdir="slurm-script", cmdno=1,
            rcodes = "profiling/3.COMET/3.E.2_feature_summary_TE.R",
            arrayshid = "slurm-script/run_TE_array.sh",
-           email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 8, "60G"))
+           email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --mem 80G --ntasks=10 --time 48:00:00 --exclude=bigmem1,bigmem2 slurm-script/run_TE_array.sh
+###>>> RUN: sbatch -p bigmemm --time 48:00:00 --exclude=bigmem1,bigmem2 --mem 8G --ntasks=1 slurm-script/run_TE_array.sh
