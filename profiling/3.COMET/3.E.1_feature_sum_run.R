@@ -2,12 +2,15 @@
 ### 12-01-2016
 ### purpose: run BSmoothing
 
-cx <- c("largedata/COMET", "largedata/COMET_CHG", "largedata/COMET_CHH")
+pwd <- list.files(path=c("largedata/COMET", "largedata/COMET_CHG", "largedata/COMET_CHH"), 
+                  pattern="^J", full.names = TRUE)
+chr <- "chr1.txt"
+infile <- paste(pwd, chr, sep="/")
 
-df <- data.frame(pwd=rep(cx, each=1), output=c(1,2,3), context=rep(c("CG", "CHG", "CHH"), each=1))
-df$output <- paste0("cache/", df$context, "_chr1_gene_fea.csv")
-# col, pwd="largedata/COMET"
-# col: type="class=I"
+
+df <- data.frame(infile=rep(infile, each=1), output=c(1,2,3), context=rep(c("CG", "CHG", "CHH"), each=1))
+df$output <- paste0("cache/", df$context, "_chr1_fea_", gsub(".*JR|\\/chr.*", "", df$infile), ".csv")
+# col, infile="largedata/COMET/chr1.txt"
 # col: output="cache/CG_chr1_TE_class1.csv"
 write.csv(df, "largedata/run_gene_df.csv")
 

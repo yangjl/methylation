@@ -69,15 +69,17 @@ runit_gene <- function(df, id){
     newgff <- rbind(gen, exs1, exs2, ins1, ins2)
     
     ####### smoothed files CG
-    pwd1 <- list.files(path=mypwd, pattern="^J", full.names = TRUE)
+    #pwd1 <- list.files(path=mypwd, pattern="^J", full.names = TRUE)
     
-    res1 <- data.frame()
-    for(i in 1:length(pwd1)){
-        out1 <- find_cval_gff(infile=paste0(pwd1[i], "/chr1.txt"), gff=newgff, TE=FALSE,
-                              features=c("exon1st", "exonlast", "gene", "intron1st", "intronlast", "up1k", "down1k"))
-        res1 <- rbind(res1, out1)
-    }
-    write.csv(res1, myout)
+    #res1 <- data.frame()
+    #for(i in 1:length(pwd1)){
+    #    out1 <- find_cval_gff(infile=paste0(pwd1[i], "/chr1.txt"), gff=newgff, TE=FALSE,
+    #                          features=c("exon1st", "exonlast", "gene", "intron1st", "intronlast", "up1k", "down1k"))
+    #    res1 <- rbind(res1, out1)
+    #}
+    out <- find_cval_gff(infile=df$infile[id], gff=newgff, TE=FALSE,
+                         features=c("exon1st", "exonlast", "gene", "intron1st", "intronlast", "up1k", "down1k"))
+    write.csv(out, myout)
 }
 
 
