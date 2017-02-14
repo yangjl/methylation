@@ -30,7 +30,7 @@ runit <- function(df, id, gff){
     for(i in 1:length(pwd1)){
         #out1 <- find_cval_gff(infile=paste0(pwd1[i], "/chr1.txt"), gff)
         out1 <- find_cval_gff(infile=paste0(pwd1[i], "/chr1.txt"), gff=subset(gff, feature %in% mytype), 
-                              features=c(mytype, "up1k", "down1k"))
+                              TE=TRUE, features=c(mytype, "up1k", "down1k"))
         res1 <- rbind(res1, out1)
     }
     write.csv(res1, myout)

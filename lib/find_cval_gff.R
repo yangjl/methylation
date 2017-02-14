@@ -3,7 +3,7 @@ mycut <- function(x){
     return(t)
 }
 
-find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", gff, 
+find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", TE=FALSE,
                           features=c("exon", "intron", "up1k", "down1k", "gene", "CDS")){
     
     df <- fread(infile)
@@ -16,11 +16,21 @@ find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", gff,
         
         if (fea == "up1k"){
             ### upstream 1kb regions
-            p <- subset(gff, feature %in% "gene" & strand %in% "+")
+            if(TE){
+                p <- subset(gff, strand %in% "+")
+            }else{
+                p <- subset(gff, feature %in% "gene" & strand %in% "+")
+            }
+            
             p$end <- p$start - 1
             p$start <- p$start - 1001
             
-            m <- subset(gff, feature %in% "gene" & strand %in% "-")
+            if(TE){
+                m <- subset(gff, strand %in% "-")
+            }else{
+                p <- subset(gff, feature %in% "gene" & strand %in% "+")
+            }
+            
             m$start <- m$end + 1
             m$end <- m$end + 1001
             
@@ -28,11 +38,21 @@ find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", gff,
             #grf <- with(onek, GRanges(seqnames=seqname, IRanges(start=start, end=end) ))
         } else if(fea == "down1k"){
             ### upstream 1kb regions
-            p <- subset(gff, feature %in% "gene" & strand %in% "+")
+            if(TE){
+                p <- subset(gff, strand %in% "+")
+            }else{
+                p <- subset(gff, feature %in% "gene" & strand %in% "+")
+            }
+           
             p$start <- p$end + 1
             p$end <- p$end + 1001
             
-            m <- subset(gff, feature %in% "gene" & strand %in% "-")
+            if(TE){
+                m <- subset(gff, strand %in% "-")
+            }else{
+                m <- subset(gff, feature %in% "gene" & strand %in% "-")
+            }
+            
             m$end <- m$start - 1001
             m$start <- m$start - 1
             
@@ -41,7 +61,6 @@ find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", gff,
         }else{
             f <- subset(gff, feature %in% fea)
         }
-        
         
         ###### prepare normalized bins
         out <- t(apply(as.matrix(f[, c("start", "end")]), 1, mycut))
