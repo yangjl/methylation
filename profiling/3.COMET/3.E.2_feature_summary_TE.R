@@ -46,6 +46,7 @@ names(repeats) <- c("seqname", "source", "feature", "start", "end", "score",
 repeats$class <- gsub(";.*", "", repeats$attribute)
 gff <- repeats[, -3]
 names(gff)[ncol(gff)] <- "feature"
+gff <- subset(gff, strand %in% "+")
 
 
 ## control elements
