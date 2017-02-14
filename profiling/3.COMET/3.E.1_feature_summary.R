@@ -77,7 +77,7 @@ runit_gene <- function(df, id){
     #                          features=c("exon1st", "exonlast", "gene", "intron1st", "intronlast", "up1k", "down1k"))
     #    res1 <- rbind(res1, out1)
     #}
-    out <- find_cval_gff(infile=df$infile[id], gff=newgff, TE=FALSE,
+    out <- find_cval_gff(infile=as.character(df$infile[id]), gff=newgff, TE=FALSE,
                          features=c("exon1st", "exonlast", "gene", "intron1st", "intronlast", "up1k", "down1k"))
     write.csv(out, myout)
 }
