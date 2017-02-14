@@ -6,6 +6,8 @@ mycut <- function(x){
 find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", TE=FALSE, gff,
                           features=c("exon", "intron", "up1k", "down1k", "gene", "CDS")){
     
+    ## gff: require seqname, start, end, feature, strand [data.frame]
+    
     df <- fread(infile)
     df$V1 <- gsub("chr", "", df$V1)
     
