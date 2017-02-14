@@ -49,7 +49,7 @@ names(gff)[ncol(gff)] <- "feature"
 
 
 ## control elements
-df <- read.csv("lardedata/run_df.csv")
+df <- read.csv("largedata/run_df.csv")
 # col, pwd="largedata/COMET"
 # col: type="class=I"
 # col: output="cache/CG_chr1_TE_class1.csv"
