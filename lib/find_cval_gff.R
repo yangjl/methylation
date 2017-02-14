@@ -3,7 +3,7 @@ mycut <- function(x){
     return(t)
 }
 
-find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", TE=FALSE,
+find_cval_gff <- function(infile="largedata/COMET/JRA1/chr1.txt", TE=FALSE, gff,
                           features=c("exon", "intron", "up1k", "down1k", "gene", "CDS")){
     
     df <- fread(infile)
