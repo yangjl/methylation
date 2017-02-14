@@ -30,4 +30,4 @@ run_Rcodes(inputdf=data.frame(file=1:240, out=1), outdir="slurm-script", cmdno=1
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
-###>>> RUN: sbatch -p bigmemm --time 48:00:00 --exclude=bigmem1,bigmem2 --mem 8G --ntasks=1 slurm-script/run_chromatin_array.sh
+###>>> RUN: sbatch -p bigmemm --time 48:00:00 --exclude=bigmem1,bigmem2 --mem 8G --ntasks=1 slurm-script/run_exp_array.sh
