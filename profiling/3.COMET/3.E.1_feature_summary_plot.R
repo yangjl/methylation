@@ -53,6 +53,7 @@ plot_eff <- function(outfile, getpdf){
         theme_bw() +
         xlab("") +
         ylab("Methylation Level") +
+        scale_color_manual(values=c("#8b2323", "#E69F00", "#56B4E9")) +
         #scale_color_manual(values=context) +
         #scale_linetype_manual(values=lty1) +
         guides(size=FALSE) +
