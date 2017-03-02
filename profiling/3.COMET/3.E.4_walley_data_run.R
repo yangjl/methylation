@@ -21,10 +21,11 @@ df$output <- paste0("largedata/lcache/", df$context, "_chr1_exp_",
 # col, pwd="largedata/COMET"
 # col: type="class=I"
 # col: output="cache/CG_chr1_TE_class1.csv"
+df <- subset(df, af %in% "cache/geneset_protein.csv")
 write.csv(df, "largedata/run_exp_df.csv")
 
 library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:240, out=1), outdir="slurm-script", cmdno=1,
+run_Rcodes(inputdf=data.frame(file=1:120, out=1), outdir="slurm-script", cmdno=1,
            rcodes = "profiling/3.COMET/3.E.4_walley_data.R",
            arrayshid = "slurm-script/run_exp_array.sh",
            email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))

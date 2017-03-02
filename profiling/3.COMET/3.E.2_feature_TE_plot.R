@@ -49,7 +49,31 @@ plot_eff <- function(outfile, getpdf){
         theme_bw() +
         xlab("") +
         ylab("Methylation Level") +
-        #scale_color_manual(values=context) +
+        scale_color_manual(values=c("#8b2323", "#E69F00", "#56B4E9")) +
+        #scale_linetype_manual(values=lty1) +
+        guides(size=FALSE) +
+        geom_smooth(method="loess", span = 0.08, size=2) +
+        #geom_smooth(span = 0.1) +
+        geom_vline(xintercept=c(1, 10), col="black") +
+        facet_grid(~ class) +
+        #ylim(0, 0.05) +
+        scale_x_continuous(breaks=c(-5, 5, 15),
+                           labels=c("Upstream 1kb", "TE", "Downstream 1kb")) +
+        theme(axis.text.y = element_text(angle = 90, hjust = 0.5),
+              #axis.text.x = element_text(angle = 20, hjust = 0.7),
+              axis.text=element_text(size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize) )
+    #abline(v=c(10, 20, 30, 40, 50), col="black")
+    p1
+    
+    p2 <- ggplot(d, aes(x=x, y=mc, colour=factor(context)) )+
+        labs(colour="context") +
+        theme_bw() +
+        xlab("") +
+        ylab("Methylation Level") +
+        scale_color_manual(values=c( "#56B4E9")) +
         #scale_linetype_manual(values=lty1) +
         guides(size=FALSE) +
         geom_smooth(method="loess", span = 0.08, size=2) +
@@ -66,7 +90,7 @@ plot_eff <- function(outfile, getpdf){
               legend.title = element_text(size=fsize, face="bold"),
               legend.text = element_text(size=fsize) )
     #abline(v=c(10, 20, 30, 40, 50), col="black")
-    p1
+    p2
     
 }
 
