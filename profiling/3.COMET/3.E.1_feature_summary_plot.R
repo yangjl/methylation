@@ -42,7 +42,7 @@ d <- subset(d, !(feature %in% "gene"))
 
 library(ggplot2)
 
-plot_eff <- function(outfile, getpdf){
+plot_eff <- function(){
     
     #######
     theme_set(theme_grey(base_size = 18)) 
@@ -77,5 +77,6 @@ plot_eff <- function(outfile, getpdf){
 }
 
 ########
-p <- plot_eff(outfile="graphs/Fig2b_var.pdf", getpdf)
-p
+pdf("graphs/Fig2b_var.pdf", width=8, height =5)
+plot_eff()
+dev.off()
