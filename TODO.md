@@ -1,4 +1,14 @@
 ## To Do List:
+
+### gene body methylation prevent aberrant transcipts
+
+1. Walley et al., 2016 data for all tissues and all reps
+2. Count gene and count by exon.
+3. fit a linear model to estimate mm effect
+4. statistics of expression diff ~ mm
+
+## Other TODO:
+
 1. plot the genome-wide methylation differences.
 2. identify DMR
 3. correlate DMR with genomic features
