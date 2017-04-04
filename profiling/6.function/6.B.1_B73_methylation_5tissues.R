@@ -156,6 +156,10 @@ write.table(out3, "largedata/B73_5tissues_exon_chh.csv", sep=",", row.names=FALS
 out1$exon <- as.character(gsub(".*exon", "", out1$exonid))
 table(out1$exon)
 
+out1 <- read.csv("largedata/B73_5tissues_exon_cg.csv")
+out2 <- read.csv("largedata/B73_5tissues_exon_chg.csv")
+out3 <- read.csv("largedata/B73_5tissues_exon_chh.csv")
+
 g1 <- as.character(subset(out1, var > 0.1)$exonid)
 g2 <- as.character(subset(out2, var > 0.15)$exonid)
 g3 <- as.character(subset(out3, var > 0.15)$exonid)

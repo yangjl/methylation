@@ -39,10 +39,19 @@ exon1_2 <- merge(exon1, exon2[, c("uid", "exp")], by="uid")
 
 exon1_2 <- subset(exon1_2, exp.x > 1 & exp.y > 1)
 
-exon1_2$exp21 <- exon1_2$exp.y - exon1_2$exp.x
+exon1_2$exp21 <- exon1_2$exp.y/exon1_2$exp.x
 exon1_2 <- subset(exon1_2, exp21 > 0)
 
-plot(exp21 ~ mm, data=exon1_2, cex=0.3, pch=16)
+par(mfrow=c(1,1))
+plot(log2(exp21) ~ mm, data=exon1_2, cex=0.3, pch=16, 
+     xlab="gene body methylation levels", ylab="Expression of 2nd exon/1st exon")
+plx <- predict(loess(exon1_2$exp21 ~ exon1_2$mm), se=T)
+lines( exon1_2$mm, col="cornflowerblue", lwd=2)
+lines(mgerp$gen, plx$fit - qt(0.975,plx$df)*plx$se, lty=2, lwd=2, col="black")
+lines(mgerp$gen, plx$fit + qt(0.975,plx$df)*plx$se, lty=2, lwd=2, col="black")
+
+
+fit <- lm(log10(exp21) ~ mm + sample + pid, data=exon1_2)
 
 
 

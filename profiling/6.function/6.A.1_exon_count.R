@@ -53,7 +53,7 @@ par(mfrow=c(2,2))
 d1 <- subset(d, mm > 0.6 & exon < 5)
 out1 <- subset(d1, SRR957418 > 1)
 dim(out1)
-beanplot(log(SRR957418) ~ exon, data = out1, kernel="cosine", ll = 0.04, cex=fs, side = "no", cut=10,
+beanplot(log2(SRR957418) ~ exon, data = out1, kernel="cosine", ll = 0.04, cex=fs, side = "no", cut=10,
          border = NA, col=list("#cd5b45", "antiquewhite3", "antiquewhite3", "antiquewhite3"))
 #axis(side =1, at =1:4, labels =c("25", "50", "75", "100"), cex.axis=fs)
 
