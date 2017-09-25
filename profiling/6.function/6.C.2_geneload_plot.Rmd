@@ -11,6 +11,7 @@ knitr::opts_knit$set(root.dir=normalizePath('../../'))
 ```
 
 
+should use genome-wide data to redo it.
 
 # Calculate gene load and methylation level
 
@@ -63,22 +64,27 @@ res <- read.csv("cache/stat_exon_mean_var.csv")
 res1 <- merge(res, lg1, by="geneid")
 res1 <- merge(res1, len[, c("id", "length")], by.x="geneid", by.y="id")
 
-res1_7 <- subset(res1, mm > 0.7)
-plot(res1_7$wbar/res1_7$length, res1_7$mm, xlab="total homozygote load", ylab="methylation level")
 
-cor.test(res1_7$wbar, res1_7$mm)
-
-
-res1_7 <- subset(res1, mm < 0.7)
-plot(res1_7$wbar/res1_7$length, res1_7$mm, xlab="total homozygote load", ylab="methylation level")
-
-cor.test(res1_7$wbar, res1_7$mm)
+plot(res1$mm, res1$wbar/res1$length, pch=16, cex=0.5, col="blue", 
+     ylab="total homozygote load per gene", xlab="methylation level")
+cor.test(res1$wbar/res1$length, res1$mm)
 
 
 
-res2 <- merge(res, lg2, by="geneid")
-plot(res2$wbar, res2$mm, xlab="total homozygote load", ylab="methylation level")
 
-cor.test(res2$wbar, res2$mm)
 ```
+```{r}
+res17 <- subset(res1, wbar/length > 0.003 & mm > 0.7)
+cor.test(res17$wbar/res17$length, res17$mm)
+
+```
+
+Michelle's idea:
+seperate out the evolutionary time
+ask Michelle about it. I kinda of lot the idea about it.
+
+
+
+
+
 
