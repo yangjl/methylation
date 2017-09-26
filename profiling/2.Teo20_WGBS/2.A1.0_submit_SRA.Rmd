@@ -29,7 +29,7 @@ irsync -rKV i:/iplant/home/yangjl/BS_teo/WGBS_fastq .
 # for i in *.fastq; do gzip --fast $i; done
 # for i in *.lz4; do rm $i; done
 
-
+library("huskeR")
 files <- list.files(path="largedata/WGBS_fastq", pattern="lz4")
 for(i in 1:length(files)){
     shid <- paste0("slurm-script/run_pigz_", i, ".sh")
@@ -41,7 +41,7 @@ for(i in 1:length(files)){
 }
 
 set_array_job(shid = "slurm-script/run_lz4_pigz.sh",
-       shcode = "sh slurm-script/run_pigz_$SLURM_ARRAY_TASK_ID.sh", arrayjobs = "1-1", wd = NULL,
+       shcode = "sh slurm-script/run_pigz_$SLURM_ARRAY_TASK_ID.sh", arrayjobs = "1-40", wd = NULL,
        jobid = "pigz", email = "yangjl0930@gmail.com", runinfo = c(FALSE, "jclarke", "20", "30","8:00:00"))
 
 
