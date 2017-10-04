@@ -59,7 +59,9 @@ theme_set(theme_grey(base_size = 18))
 s <- ggplot(lres, aes(x=files, y=reads, fill = type)) + 
     #opts(axis.text.x=theme_text(angle=90)) +
     geom_bar(stat="identity") +
-    labs(x="Fastq files", y="# of bp", fill="Trimming") +
+    labs(x="Accession ID", y="Base-pairs", fill="Trimming") +
     theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12))
-s
 
+pdf("graphs/SFig_wgbs_trimming.pdf", width=10, height=5)
+s
+dev.off()
