@@ -38,7 +38,7 @@ write.table(res, "cache/comp2_bismap_stat.csv", sep=",", row.names=FALSE, quote=
 #########
 library("data.table")
 
-
+bi <- read.csv("cache/comp2_bismap_stat.csv")
 
 
 
