@@ -18,6 +18,8 @@ knitr::opts_knit$set(root.dir=normalizePath('../../'))
 irsync -rV i:/iplant/home/yangjl/Github/methylation/largedata/wgbs_smoothed .
 irsync -rKV i:/iplant/home/yangjl/Github/methylation/largedata/gatk_vcf .
 
+irsync -rKV i:/iplant/home/yangjl/Github/methylation/largedata/COMET_CHH .
+
 ```
 
 
