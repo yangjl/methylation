@@ -41,7 +41,7 @@ runmcmc_te_geneset(JOBID, inputdf="largedata/type.csv")
 
 ## Up and Down Scan for Genome wide Genic Features
 
-```{r}
+```{r, eval=FALSE}
 geneset <- read.csv("cache/geneset_rnaseq.csv")
 geneset$value <- log10(geneset$m)
 names(geneset)[2] <- "geneid"
