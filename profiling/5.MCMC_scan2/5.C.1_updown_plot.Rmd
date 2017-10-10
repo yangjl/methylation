@@ -137,6 +137,30 @@ p3 <- ggplot(geneset, aes(x=value, fill=Cutoff)) +
         
 ```
 
+-----------------------------
+
+cache/mcmc_genic_fs_rpkm_updown_extreme.csv
+
+```{r}
+out <- read.csv("cache/mcmc_genic_fs_rpkm_updown_extreme.csv")
+out$context <- gsub(".csv|.*_", "", out$comet_file)
+
+# -0.340779507155726  0.679169242806791   1.17266506283193 
+
+# highly expressed genes
+myout <- subset(out, cutoff > 0)
+pdf("graphs/Fig_genic_updown_rpkm_q90.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
 
 
+# meanly expressed genes
+myout <- subset(out, cutoff < 0)
+pdf("graphs/Fig_genic_updown_rpkm_q10.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+```
 

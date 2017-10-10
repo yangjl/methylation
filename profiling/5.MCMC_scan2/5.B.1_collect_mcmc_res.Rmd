@@ -90,6 +90,17 @@ out3 <- merge(out3, df, by.x="file", by.y="outRD")
 write.table(out3, "cache/mcmc_genic_fs_rpkm_updown.csv", sep=",", row.names=FALSE, quote=FALSE)
 ```
 
+### Extreme 10% and 90%
+
+```{r, eval=FALSE}
+#pdf("graphs/genome_wide_fea_postsfs.pdf", height=5, width=5)
+out4 <- get_post_rd(path="largedata/lcache", pattern="row.*.RData", doplot=FALSE)
+
+df <- read.csv("largedata/mcmc_scan_input_genic_updown32.csv")
+out4 <- merge(df, out4, by.y="file", by.x="outRD")
+
+write.table(out4, "cache/mcmc_genic_fs_rpkm_updown_extreme.csv", sep=",", row.names=FALSE, quote=FALSE)
+```
 
 
 
