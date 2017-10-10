@@ -77,6 +77,26 @@ dev.off()
 write.table(out2, "cache/mcmc_genic_fs.csv", sep=",", row.names=FALSE, quote=FALSE)
 ```
 
+## Up and Down based on RPKM
+
+```{r}
+pdf("graphs/genome_wide_fea_postsfs.pdf", height=5, width=5)
+out3 <- get_post_rd(path="largedata/lcache", pattern="row.*.RData", doplot=FALSE)
+dev.off()
+
+df <- read.csv("largedata/mcmc_scan_input_genic_updown48.csv")
+out3 <- merge(out3, df, by.x="file", by.y="outRD")
+
+write.table(out3, "cache/mcmc_genic_fs_rpkm_updown.csv", sep=",", row.names=FALSE, quote=FALSE)
+```
+
+
+
+
+
+
+
+
 
 ## Expression level
 ```{r}
