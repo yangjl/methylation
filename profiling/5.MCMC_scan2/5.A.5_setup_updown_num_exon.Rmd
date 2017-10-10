@@ -1,0 +1,77 @@
+---
+author: "Jinliang Yang"
+title: "Use the MCMCBC package to Scan Genic features"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
+
+## Major function that will be used
+
+```{r, eval=FALSE}
+runmcmc_te_geneset(JOBID, inputdf="largedata/type.csv")
+    ## JOBID: control the array job number. [num, 1]
+    ## inputdf: [data.frame, cols=comet_file:(comet blocks file, i.e. largedata/lcache/SFS_comet_blocks_CG.csv), 
+    #                    length:(blocks quantile len, 0,1,2,3,4), TE:(yes, no), 
+    #                    outRD:(chr, "out.RData"),
+    #                    feature:(chr, "exon", "intron", "up1k", "gene"),
+    #                    
+    #                    optional:
+    #                    geneset_file:(chr, csv, cols: geneid, value, i.e. "geneset.tex"),
+    #                    gset:(chr, "below" or "above", "wholeset"),
+    #                    cutoff:(num, num, 0.5)]
+    ## geneset: gene set to determine which set to cal sfs. [data.frame, cols: geneid, value]
+    ## cutoff: cutoff for the values to get up set and down set of the gene. [num, 0.5]
+```
+
+
+
+## Up and Down Scan for Genome wide Genic Features
+
+```{r, eval=FALSE}
+geneset <- read.csv("largedata/exon_consistency.csv")
+
+q1 <- quantile(geneset$value, probs=0.9)
+q2 <- quantile(geneset$value, probs=0.75)
+q3 <- quantile(geneset$value, probs=0.5)
+q4 <- quantile(geneset$value, probs=0.25)
+q5 <- quantile(geneset$value, probs=0.1)
+
+## gset 
+gset <- c("below", "above")
+## context
+comet_file <- c("largedata/lcache/SFS_comet_blocks_CG.csv", "largedata/lcache/SFS_comet_blocks_CHG.csv")
+## gene means 1kb upstream
+fs <- c("exon", "intron", "gene", "up1k")
+## COMET length
+ln <- 0
+
+inputdf <- data.frame(comet_file=rep(comet_file, each=8*5), length=0, feature=rep(fs, each=20), TE="no", 
+                      geneset_file="largedata/exon_consistency.csv",
+                      cutoff=rep(c(q1, q2, q3, q4, q5), each=2),
+                      gset=rep(c("below", "above"), each=1))
+inputdf$outRD <- paste0(gsub(".csv", "", inputdf$comet_file), "_row", 1:nrow(inputdf), ".RData")
+
+### scan inputdf
+write.table(inputdf, "largedata/mcmc_scan_input.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+library("huskeR")
+run_Rcodes(inputdf, outdir="slurm-script", cmdno=1,
+           rcodes = "profiling/5.MCMC_scan2/5.A.2_geneset_scan.R",
+           arrayshid = "slurm-script/run_mcmc_exon_updown80.sh",
+           email="yangjl0930@gmail.com", runinfo = c(FALSE, "jclarke", 2, "8", "10:00:00"))
+###>>> In this path: cd /lustre/work/jyanglab/jyang21/projects/methylation
+###>>> RUN: sbatch -p jclarke --ntasks=2 --mem 8G --time=10:00:00 slurm-script/run_mcmc_exon_updown80.sh
+
+## Output file for post run data collection purpose:
+write.table(inputdf, "largedata/mcmc_scan_input_exon_updown80.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+
+```

@@ -1,0 +1,69 @@
+---
+author: "Jinliang Yang"
+title: "Exon TPM count"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
+
+
+## Up and Down Scan for Genome wide Genic Features
+
+```{r, eval=FALSE}
+
+library("data.table")
+library(tidyr)
+
+res <- read.csv("cache/stat_exon_mean_var.csv")
+
+tpm <- fread("largedata/tpm_9runs.csv", data.table=FALSE)
+tpm$geneid <- gsub(".exon.*", "", tpm$target_id)
+tpm$geneid <- gsub("_E.*", "", tpm$geneid)
+
+
+d <- merge(res, tpm, by="geneid")
+d$exon <- gsub(".*exon|.*E", "", d$target_id)
+d$exon <- as.numeric(as.character(d$exon))
+
+
+out <- gather(d, sample, exp, 8:16)
+
+rtb <- read.delim("data/SraRunTable_walley_etal_2016.txt", header=TRUE)
+#c('submission','study','sample','experiment')
+sum(rtb$MBases_l)
+
+sra <- data.frame(SRR=rtb$Run_s, sid=rtb$Sample_Name_s, pid=rtb$tissue_s, gid=rtb$genotype_s)
+
+out2 <- merge(out, sra[, c("SRR", "pid")], by.x="sample", by.y="SRR")
+out2$uid <- paste(out2$sample, out2$geneid, sep="_")
+
+library("plyr")
+out3 <- ddply(out2, .(geneid), summarise,
+              mtpm =mean(exp),
+              sd = sd(exp))
+out3$value <- log10(out3$sd/out3$mtpm)
+
+out3 <- subset(out3, sd != 0)
+
+cor.test(out3$value, out3$mtpm)
+
+
+write.table(out3, "largedata/exon_consistency.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+```
+
+```{r}
+out3 <- read.csv("largedata/exon_consistency.csv")
+par(mfrow=c(1,2))
+plot(out3$mtpm, out$value, xlab="Mean expression", ylab="log10(sd/mean)")
+hist(out3$value, breaks=30, xlab="log10(sd/mean)", main="")
+
+```
+

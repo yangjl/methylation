@@ -81,3 +81,45 @@ write.table(inputdf, "largedata/mcmc_scan_input_genic_updown48.csv", sep=",", ro
 ```
 
 
+## Extreme cases: Up and Down Scan for Genome wide Genic Features
+
+> 10%
+< 10%
+
+```{r}
+geneset <- read.csv("cache/geneset_rnaseq.csv")
+geneset$value <- log10(geneset$m)
+names(geneset)[2] <- "geneid"
+write.table(geneset, "largedata/geneset_rpkm.csv", sep=",", row.names=FALSE, quote=FALSE)
+q1 <- quantile(geneset$value, probs=0.90)
+q2 <- quantile(geneset$value, probs=0.1)
+
+## gset 
+gset <- c("below", "above")
+## context
+comet_file <- c("largedata/lcache/SFS_comet_blocks_CG.csv", "largedata/lcache/SFS_comet_blocks_CHG.csv")
+## gene means 1kb upstream
+fs <- c("exon", "intron", "gene", "up1k")
+## COMET length
+ln <- 0
+
+inputdf <- data.frame(comet_file=rep(comet_file, each=8*2), length=0, feature=rep(fs, each=4), TE="no", 
+                      geneset_file="largedata/geneset_rpkm.csv",
+                      cutoff=rep(c(q1, q2), each=2),
+                      gset=rep(c("below", "above"), each=1))
+inputdf$outRD <- paste0(gsub(".csv", "", inputdf$comet_file), "_row", 1:nrow(inputdf), ".RData")
+
+### scan inputdf
+write.table(inputdf, "largedata/mcmc_scan_input.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+library("huskeR")
+run_Rcodes(inputdf, outdir="slurm-script", cmdno=1,
+           rcodes = "profiling/5.MCMC_scan2/5.A.2_geneset_scan.R",
+           arrayshid = "slurm-script/run_mcmc_genic_updown32.sh",
+           email="yangjl0930@gmail.com", runinfo = c(FALSE, "jclarke", 2, "8", "10:00:00"))
+
+## Output file for post run data collection purpose:
+write.table(inputdf, "largedata/mcmc_scan_input_genic_updown32.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+
+```
