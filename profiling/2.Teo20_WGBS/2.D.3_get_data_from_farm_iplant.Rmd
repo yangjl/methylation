@@ -1,0 +1,26 @@
+---
+title: "Get Data from CyVerse"
+author: Jinliang Yang
+date: 10-06-2017
+output: html_notebook
+---
+
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
+
+## Supplementary Figure
+
+```{bash}
+irsync -rV i:/iplant/home/yangjl/Github/methylation/largedata/wgbs_smoothed .
+irsync -rKV i:/iplant/home/yangjl/Github/methylation/largedata/gatk_vcf .
+
+irsync -rKV i:/iplant/home/yangjl/Github/methylation/largedata/COMET_CHH .
+
+```
+
+
+

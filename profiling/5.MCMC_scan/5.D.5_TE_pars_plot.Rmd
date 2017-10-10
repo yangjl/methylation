@@ -1,13 +1,50 @@
+---
+author: "Jinliang Yang"
+title: "Plot for the TE scanning Results"
+date: 10-08-2017
+output: html_notebook
+---
 
 
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
+
+## Collect MCMC Results
+
+```{r}
+files <- list.files(path="largedata/lcache", pattern="te_len.*csv", full.names=TRUE)
+
+out <- data.frame()
+for(i in 1:length(files)){
+   tb <-  read.csv(files[i])
+   out <- rbind(out, tb)
+}
+
+out$nes <- 150000*out$s
+
+out$context <- gsub("_.*", "", out$id)
+#out$q <- paste("q", gsub(".*_", "", out$id), sep="")
+
+write.csv(out, "reports/te_pars.csv")
+
+```
 
 
+# Load Data and Library
 
 
-
-
+```{r}
 outall <- read.csv("reports/te_pars.csv")
-outall$feature <- gsub(".*I ", "", outall$feature)
+
+###
+library(ggplot2)
+library(cowplot)
+
+
+outall$feature <- gsub(".*I ", "", outall$id)
 outall$size <- gsub(".*G_", "", outall$id)
 outall$size <- paste0("q", gsub("_.*", "", outall$size))
 outall[outall$feature == "Retroelements", ]$feature <- "Class I"
@@ -26,11 +63,30 @@ anova(fit3)
 fit4 <- lm(nu ~ mu + context + feature + size, data = outall ) 
 anova(fit4)
 
+```
+
+### new version
+
+```{r}
+outall <- read.csv("reports/te_pars.csv")
+
+###
 library(ggplot2)
 library(cowplot)
 
-plot_fig3ab <- function(outfile, getpdf){
-    
+
+outall$feature <- gsub(".*I", "", outall$id)
+outall$size <- gsub(".*G_", "", outall$id)
+outall$size <- paste0("q", gsub("_.*", "", outall$size))
+outall[outall$feature == "Retroelements", ]$feature <- "Class I"
+outall[grep("Other", outall$feature), ]$feature <- "Class II"
+
+```
+
+
+# Start to Plot Results
+
+```{r}
     out <- outall
     fsize=16
     p1 <- ggplot(out, aes(x=factor(feature), y= log10(mu),
@@ -76,8 +132,13 @@ plot_fig3ab <- function(outfile, getpdf){
               legend.title = element_text(size=fsize, face="bold"),
               legend.text = element_text(size=fsize))
     
-    #PLOT
-    plot_grid(p1, p2, p3, ncol=3, rel_widths=c(1,1,1.3), align="h", labels =c("A", "B", "C"))
-}
+#PLOT
 ######
-plot_fig3ab(outfile="graphs/Fig_post_var.pdf", getpdf=TRUE)
+pdf("graphs/Fig_post_var_new.pdf", height=3, width=10)
+plot_grid(p1, p2, p3, ncol=3, rel_widths=c(1,1,1.2), align="h", labels =c("A", "B", "C"))
+dev.off()
+
+```
+
+
+

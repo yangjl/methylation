@@ -26,5 +26,5 @@ source("lib/re_calc.R")
 ## CHH
 file3 <- list.files(path="largedata/wgbs_smoothed", pattern="chh$", full.names = TRUE)
 out3 <- re_calc(file3[JOBID])
-write.table(out3, paste0(files[JOBID], ".out"), sep=",", row.names=FALSE, quote=FALSE)
+fwrite(out3, paste0(file3[JOBID], ".out"), sep=",", row.names=FALSE, quote=FALSE)
 

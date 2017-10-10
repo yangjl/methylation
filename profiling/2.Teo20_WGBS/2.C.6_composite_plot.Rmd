@@ -1,42 +1,52 @@
-### Jinliang Yang
-### August 4th, 2016
+---
+title: "Get fq from CyVerse and Submit to SRA"
+author: Jinliang Yang
+date: 09-22-2017
+output: html_notebook
+---
 
-library(farmeR)
 
-files <- list.files(path = "largedata/wgbs_align", pattern = "PE_report.txt", full.names = TRUE)
-features <- c("Sequence pairs analysed in total:\t",
-              "Number of paired-end alignments with a unique best hit:\t",
-              "Sequence pairs with no alignments under any condition:\t",
-              "Sequence pairs did not map uniquely:\t",
-              #"Sequence pairs which were discarded because genomic sequence could not be extracted:",
-              "Total number of C's analysed:\t",
-              "Total methylated C's in CpG context:\t",
-              "Total methylated C's in CHG context:\t",
-              "Total methylated C's in CHH context:\t",
-              "Total unmethylated C's in CpG context:\t",
-              "Total unmethylated C's in CHG context:\t",
-              "Total unmethylated C's in CHH context:\t"
-)
-res <- get_file2tab(files, features, replace=T )
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
 
-names(res) <- c("totpe", "hit1", "hit0", "hitN", "totC","mCG", "mCHG", "mCHH", "unCG", "unCHG", "unCHH")
-row.names(res) <- gsub(".*/|_PE_.*", "", files) 
+## Supplementary Figure
 
+```{r, eval=FALSE}
+######## methylation
+stat <- read.delim("cache/maize_bismap_trimming_stat.txt", header=TRUE)
+#stat$totpe <- gsub("\\s+|,|\\(.*|bp", "", stat$totpe)
+
+res <- apply(stat[,-1], 2, function(x) gsub("\\s+|,|\\(.*|bp", "",x))
 res <- as.data.frame(apply(res, 2, as.numeric))
-res$seqdp <- (res$totpe)*200/(2500*1e6)
-res$mr1 <- with(res, round(hit1/totpe,3)) #uniquely mapped rate
-res$mr0 <- with(res, round(hit0/totpe,3)) #non-mapping rate
-res$mrN <- with(res, round(hitN/totpe,3)) #multiple-mapping rate
+res$files <- gsub("_.*", "", stat$files)
 
-res$cg <- with(res, round(mCG/(mCG+unCG), 3))
-res$chg <- with(res, round(mCHG/(mCHG+unCHG), 3))
-res$chh <- with(res, round(mCHH/(mCG+unCHH), 3))
-res$seqid <- gsub(".*/|_PE_.*", "", files) 
+res$aptrimmed <- res$totbp - res$totout - res$qtrimmed
 
-write.table(res, "cache/pg20_bismap_stat.csv", sep=",", row.names=FALSE, quote=FALSE)
+library(ggplot2)
+library(tidyr)
 
-######### Plot
+lres <- gather(res[, 6:9], type, reads, c(1,2,4))
+lres <- lres[order(lres$files, lres$type, decreasing = TRUE),]
 
+lres$type <- factor(lres$type, levels = c("aptrimmed", "qtrimmed",  "totout"), 
+                    labels=c("Adapter", "Q<20", "remaning"), ordered=TRUE)
+
+theme_set(theme_grey(base_size = 18)) 
+s <- ggplot(lres, aes(x=files, y=reads, fill = type)) + 
+    #opts(axis.text.x=theme_text(angle=90)) +
+    geom_bar(stat="identity") +
+    labs(x="Accession ID", y="Base-pairs", fill="Trimming") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, size=12))
+
+pdf("graphs/SFig_wgbs_trimming.pdf", width=10, height=5)
+s
+dev.off()
+```
+
+```{r}
 pg20 <- read.csv("cache/pg20_bismap_stat.csv")
 
 library(ggplot2)
@@ -81,4 +91,22 @@ library("cowplot")
 pdf("graphs/SFig_mappingrate_ratio.pdf", width=10, height=5)
 plot_grid(p1, p2, ncol=2, labels = c("a", "b"), label_size = 24)
 dev.off()
+
+```
+
+
+
+
+## Final plot
+```{r}
+library("cowplot")
+
+pdf("graphs/SFig_align.pdf", width=10, height=10)
+
+bot_row <- plot_grid(p1, p2, ncol=2, labels = c("b", "c"), label_size = 24)
+plot_grid(s, bot_row, nrow=2, labels = c("a", ""), label_size = 24)
+
+dev.off()
+```
+
 
