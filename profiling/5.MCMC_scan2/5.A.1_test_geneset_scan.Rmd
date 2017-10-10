@@ -69,11 +69,12 @@ sfsplot(res, burnin = 0.2, rates = c(1e+08, 1e+08, 1e+08),
 
 
 ```{r, eval=FALSE}
-runmcmc_geneset <- function(JOBID, inputdf="largedata/type.csv", geneset, cutoff, outid){
+runmcmc_te_geneset <- function(JOBID, inputdf="largedata/type.csv", geneset, cutoff, outid){
     ## JOBID: control the array job number. [num, 1]
     ## inputdf: [data.frame, cols=comet_file:(comet blocks file, i.e. largedata/lcache/SFS_comet_blocks_CG.csv), 
-    #                    length:(blocks quantile len, 0,1,2,3,4), TE:(yes, no), gset:(chr, "below" or "above"),
-    #                    feature:(chr, "exon", "intron", "up1k", "gene")]
+    #                    length:(blocks quantile len, 0,1,2,3,4), TE:(yes, no), gset:(chr, "below" or "above", "wholeset"),
+    #                    feature:(chr, "exon", "intron", "up1k", "gene"),
+    #                    outRD:(chr, "out.RData")]
     ## geneset: gene set to determine which set to cal sfs. [data.frame, cols: geneid, value]
     ## cutoff: cutoff for the values to get up set and down set of the gene. [num, 0.5]
     ## outid: prefix for outid. [chr, "largedata/output"]
@@ -143,22 +144,9 @@ runmcmc_geneset <- function(JOBID, inputdf="largedata/type.csv", geneset, cutoff
   ##########
   res <- MCMCBC(my_sfs=out$Freq, rates=c(1E8,1E8,1E8), sd=c(0.05,0.05,0.05), k=0:40,
               conditional=FALSE, Ne=150000, ngen=100000, verbose=FALSE)
-    d <- mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8), doplot=TRUE)
+  d <- mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8), doplot=FALSE)
     # posterior mu [ 2.03493482965863e-06 ], nu [ 1.98123661448284e-07 ] and s [ 1.89713888507979e-05 ]
-
-    
-    
-    
-    
-    save(list=c("d", "res"), file="cache/TE_type1_mcmc.RData")
-
-    ob <- load("cache/TE_type1_mcmc.RData")
-    save_plot("graphs/TE_type1_mcmc.png", d, base_height = 8, base_width = 12)
-
-
-    sfsplot(res, burnin = 0.2, rates = c(1e+08, 1e+08, 1e+08),
-    sfsplot = "plotmean", Ne = 150000, k = 0:40)
-
+  save(list=c("d", "res"), file=mya$outRD)
 }
 
 ```
