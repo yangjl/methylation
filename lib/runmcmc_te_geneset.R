@@ -16,7 +16,7 @@ runmcmc_te_geneset <- function(JOBID, inputdf="largedata/type.csv"){
     a <- read.csv(inputdf, header=TRUE)
     mya <- a[JOBID, ]
     
-    outfile <- mya$outRD
+    outfile <- as.character(mya$outRD)
     if(!is.null(mya$geneset_file)){
         geneset <- read.csv(mya$genset_file, header=TRUE)
     }

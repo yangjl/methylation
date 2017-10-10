@@ -53,7 +53,7 @@ fea <- "Class I Retroelements"
 TE <- "yes"
 
 inputdf <- data.frame(comet_file=rep(comet_file, each=5), length=rep(ln, times=2), feature=fea, TE="yes")
-inputdf$outRD <- paste0(gsub("csv", "", inputdf$comet_file), "_", "len",inputdf$length, "_typeI_TE", ".RData")
+inputdf$outRD <- paste0(gsub(".csv", "", inputdf$comet_file), "_", "len",inputdf$length, "_typeI_TE", ".RData")
 
 ### TYPE I te scan with various comet length
 write.table(inputdf, "largedata/mcmc_scan_input.csv", sep=",", row.names=FALSE, quote=FALSE)
@@ -82,7 +82,7 @@ fs <- c("exon", "intron", "gene", "up1k")
 ## COMET length
 ln <- 0
 
-inputdf <- data.frame(comet_file=rep(comet_file, each=4), length=0, feature=rep(fs, times=2), TE="no")
+inputdf <- data.frame(comet_file=rep(comet_file, each=4), length=0, feature=rep(fs, times=2), TE="no", gset="wholeset")
 inputdf$outRD <- paste0(gsub("csv", "", inputdf$comet_file), "_len0_", inputdf$feature, ".RData")
 
 ### scan inputdf
