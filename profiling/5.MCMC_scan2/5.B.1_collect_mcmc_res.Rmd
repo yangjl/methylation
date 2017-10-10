@@ -1,0 +1,124 @@
+---
+author: "Jinliang Yang"
+title: "Post MCMCBC result collection"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+
+devtools::install_git(
+  "https://git.unl.edu/jyang21/mcmcbc",
+  credentials = git2r::cred_user_pass("jyang21", getPass::getPass())
+)
+ls(getNamespace("mcmcbc"), all.names=TRUE)
+```
+
+## Major function that will be used
+```{r}
+get_post_rd <- function(path="largedata/lcache", pattern="typeI_TE.RData", doplot=FALSE){
+    files <- list.files(path, pattern, full.names=TRUE)
+
+    out <- data.frame()
+    for(i in 1:length(files)){
+        tb <-  load(files[i])
+        tem <- data.frame(file=files[i], mu=d[1], nu=d[2], s=d[3])
+        out <- rbind(out, tem)
+        #out$context <- gsub("_.*", "", out$id)
+        #out$q <- gsub(".*_", "", out$id)
+        if(doplot){
+            #mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8), doplot=TRUE)
+            sfsplot(res, burnin = 0.2, rates = c(1e+08, 1e+08, 1e+08), sfsplot = "plotmean", Ne = 150000, k = 0:40)
+        }
+    }
+
+    out$nes <- 150000*out$s
+    
+    return(out)
+
+}
+
+get_post_mcmc <- function(path="largedata/lcache", pattern="rpkm_mean.*csv"){
+    files <- list.files(path, pattern, full.names=TRUE)
+
+    out <- data.frame()
+    for(i in 1:length(files)){
+        tb <-  read.csv(files[i])
+        out <- rbind(out, tb)
+    }
+
+    out$nes <- 150000*out$s
+    out$context <- gsub("_.*", "", out$id)
+    out$q <- gsub(".*_", "", out$id)
+    return(out)
+
+}
+```
+
+
+## Type I TE
+```{r}
+out1 <- get_post_rd(path="largedata/lcache", pattern="typeI_TE.RData", doplot=FALSE)
+write.table(out1, "cache/mcmc_typeI_TE.csv", sep=",", row.names=FALSE, quote=FALSE)
+```
+
+## Genome Wide Gene Features
+
+```{r}
+pdf("graphs/genome_wide_fea_postsfs.pdf", height=5, width=5)
+out2 <- get_post_rd(path="largedata/lcache", pattern="._len0_.*.RData", doplot=TRUE)
+dev.off()
+
+write.table(out2, "cache/mcmc_genic_fs.csv", sep=",", row.names=FALSE, quote=FALSE)
+```
+
+
+## Expression level
+```{r}
+rpkm <- get_post_mcmc(path="largedata/lcache", pattern="rpkm_mean.*csv")
+```
+
+
+
+
+```{r}
+
+
+
+fit1 <- lm(nes ~ context + feature + q, data = out )
+anova(fit1)
+
+
+out <- read.csv("reports/rpkm_mean_pars.csv")
+
+##########
+files <- list.files(path="largedata/lcache", pattern="rpkm_var.*csv", full.names=TRUE)
+
+out <- data.frame()
+for(i in 1:length(files)){
+    tb <-  read.csv(files[i])
+    out <- rbind(out, tb)
+}
+
+out$nes <- 150000*out$s
+
+out$context <- gsub("_.*", "", out$id)
+out$q <- gsub(".*_", "", out$id)
+
+write.csv(out, "reports/rpkm_var_pars.csv")
+
+
+fit1 <- lm(nes ~ context + feature + q, data = out )
+anova(fit1)
+
+
+out <- read.csv("reports/rpkm_mean_pars.csv")
+
+```
+
+

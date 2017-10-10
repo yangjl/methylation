@@ -18,13 +18,13 @@ runmcmc_te_geneset <- function(JOBID, inputdf="largedata/type.csv"){
     
     outfile <- as.character(mya$outRD)
     if(!is.null(mya$geneset_file)){
-        geneset <- read.csv(mya$genset_file, header=TRUE)
+        geneset <- read.csv(as.character(mya$geneset_file), header=TRUE)
     }
     if(!is.null(mya$cutoff)){
         cutoff <- mya$cutoff
     }
     if(!is.null(mya$gset)){
-        gset <- mya$gset
+        gset <- as.character(mya$gset)
     }
     
     
