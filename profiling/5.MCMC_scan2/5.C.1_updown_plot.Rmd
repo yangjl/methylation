@@ -1,0 +1,85 @@
+---
+author: "Jinliang Yang"
+title: "Post MCMCBC result collection"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+
+devtools::install_git(
+  "https://git.unl.edu/jyang21/mcmcbc",
+  credentials = git2r::cred_user_pass("jyang21", getPass::getPass())
+)
+ls(getNamespace("mcmcbc"), all.names=TRUE)
+```
+
+## Major function that will be used
+
+```{r}
+out <- read.csv("")
+```
+
+
+```{r}
+out <- outall
+fsize=16
+p1 <- ggplot(out, aes(x=factor(feature), y= log10(mu),
+                           fill=factor(context, levels=c("CG", "CHG"), labels=c("CG", "CHG")))) + 
+        geom_boxplot() +
+        #facet_wrap(~ size) + 
+        xlab("") +
+        guides(fill=FALSE) +
+        ylim(c(-7, -5)) +
+        ylab("log10(mu)") +
+        ggtitle("") + theme_bw() +
+        labs(fill="Context") +
+        theme(axis.text = element_text( angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    
+p2 <- ggplot(out, aes(x=factor(feature), y= log10(nu),
+                          fill=factor(context, levels=c("CG", "CHG"), labels=c("CG", "CHG")))) + 
+        geom_boxplot() +
+        #facet_wrap(~ size) + 
+        guides(fill=FALSE) +
+        xlab("") +
+        ylim(c(-7, -5)) +
+        ylab("log10(nu)") +
+        ggtitle("") + theme_bw() +
+        labs(fill="Context") +
+        theme(axis.text = element_text(angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    
+p3 <- ggplot(out, aes(x=factor(feature), y= nes,
+                          fill=factor(context, levels=c("CG", "CHG"), labels=c("CG", "CHG")))) + 
+        geom_boxplot() +
+        xlab("") +
+        #ylim(c(0,1)) +
+        ylab("Ne*s") +
+        ggtitle("") + theme_bw() +
+        labs(fill="Context") +
+        theme(axis.text = element_text(angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    
+#PLOT
+######
+pdf("graphs/Fig_post_var_new.pdf", height=3, width=10)
+plot_grid(p1, p2, p3, ncol=3, rel_widths=c(1,1,1.2), align="h", labels =c("A", "B", "C"))
+dev.off()
+```
+
+
+
+
+
