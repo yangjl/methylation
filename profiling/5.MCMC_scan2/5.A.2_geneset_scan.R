@@ -10,9 +10,7 @@ JOBID <- as.numeric(as.character(args[1]))
 print(JOBID)
 
 ###########
-
-source("lib/runmcmc_te_geneset.R")
-
+# load library
 library("data.table")
 library("GenomicRanges")
 library(gsl) #Gnu scientific Library is a collection of numerical routines for scientific computing.
@@ -21,8 +19,9 @@ library(utils)
 library(tidyr)
 library(dplyr)
 library(cowplot)
+library(mcmcbc)
 
-
+source("lib/runmcmc_te_geneset.R")
 set.seed(1234579)
 
 runmcmc_te_geneset(JOBID, inputdf="largedata/mcmc_scan_input.csv")
