@@ -19,19 +19,50 @@ devtools::install_git(
 ls(getNamespace("mcmcbc"), all.names=TRUE)
 ```
 
+## Major function that will be used
+
+```{r}
+runmcmc_te_geneset <- function(JOBID, inputdf="largedata/type.csv")
+    ## JOBID: control the array job number. [num, 1]
+    ## inputdf: [data.frame, cols=comet_file:(comet blocks file, i.e. largedata/lcache/SFS_comet_blocks_CG.csv), 
+    #                    length:(blocks quantile len, 0,1,2,3,4), TE:(yes, no), 
+    #                    outRD:(chr, "out.RData"),
+    #                    feature:(chr, "exon", "intron", "up1k", "gene"),
+    #                    
+    #                    optional:
+    #                    geneset_file:(chr, csv, cols: geneid, value, i.e. "geneset.tex"),
+    #                    gset:(chr, "below" or "above", "wholeset"),
+    #                    cutoff:(num, num, 0.5)]
+    ## geneset: gene set to determine which set to cal sfs. [data.frame, cols: geneid, value]
+    ## cutoff: cutoff for the values to get up set and down set of the gene. [num, 0.5]
+```
+
+
+
 ## Run for Type I TE
 
 ```{r}
+## context
+comet_file <- c("largedata/lcache/SFS_comet_blocks_CG.csv", "largedata/lcache/SFS_comet_blocks_CHG.csv")
 ## COMET length
 ln <- 0:4
-## context
-type <- c("CG", "CHG")
+## feature
+fea <- "Class I Retroelements"
 ## gene means 1kb upstream
+TE <- "yes"
 
+inputdf <- data.frame(comet_file=rep(comet_file, each=5), length=rep(ln, times=2), feature=fea, TE="yes")
+inputdf$outRD <- paste0(gsub("csv", "", inputdf$comet_file), "_", "len",inputdf$length, "_typeI_TE", ".RData")
 
-a <- data.frame(length=rep(ln, each=2), type=rep(type, each=1))
-a$id <- paste(a$type, a$length, sep="_")
-a$TE <- "no"
+### TYPE I te scan with various comet length
+write.table(inputdf, "largedata/mcmc_scan_input.csv", sep=",", row.names=FALSE, quote=FALSE)
+
+library("huskeR")
+run_Rcodes(inputdf, outdir="slurm-script", cmdno=1,
+           rcodes = "profiling/5.MCMC_scan2/5.A.2_geneset_scan.R",
+           arrayshid = "slurm-script/run_mcmc_te10.sh",
+           email="yangjl0930@gmail.com", runinfo = c(FALSE, "jclarke", 2, "8G", "10:00:00"))
+
 
 ### RPKM mean
 write.table(a, "largedata/gs_type.csv", sep=",", row.names=FALSE, quote=FALSE)
@@ -39,11 +70,7 @@ write.table(a, "largedata/gs_type.csv", sep=",", row.names=FALSE, quote=FALSE)
 write.table(a, "largedata/rpkm_var_type.csv", sep=",", row.names=FALSE, quote=FALSE)
 
 
-library("farmeR")
-run_Rcodes(inputdf=data.frame(file=1:10, out=1:10), outdir="slurm-script", cmdno=1,
-           rcodes = "profiling/5.MCMC_scan/5.D.1_gw-scan.R",
-           arrayshid = "slurm-script/run_mcmc_gs10.sh",
-           email="yangjl0930@gmail.com", runinfo = c(FALSE, "bigmemm", 1, "8G"))
+
 
 ###>>> In this path: cd /home/jolyang/Documents/Github/methylation
 ###>>> RUN: sbatch -p bigmemm --mem 8G --ntasks=1 --exclude=bigmem1,bigmem3,bigmem6 --time 24:00:00 slurm-script/run_mcmc_gs10.sh
