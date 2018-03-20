@@ -20,3 +20,8 @@ set_farm_job(slurmsh = "slurm-script/upload_sra.sh",
 
 # rm 2920_3807_2920_Y_RIMMA0806-1_R2.fastq.gz
 # rm 2918_3807_2918_N_RIMMA0804.1_R2.fastq.gz
+
+# download VCF AGPV4
+# rsync -alPvz farm:/group/jrigrp4/VCF_JRIAL2_20samples/ .
+# irsync -rKV VCF_JRIAL2_20samples/ i:/iplant/home/yangjl/
+# irsync -rKV i:/iplant/home/yangjl/teo20_VCF_AGPv4 .
