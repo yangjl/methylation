@@ -1,0 +1,56 @@
+---
+author: "Jinliang Yang"
+title: "Post MCMCBC result collection"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+```
+
+## Major function that will be used
+```{r}
+get_post_rd <- function(path="largedata/lcache", pattern="typeI_TE.RData", doplot=FALSE){
+    files <- list.files(path, pattern, full.names=TRUE)
+
+    out <- data.frame()
+    for(i in 1:length(files)){
+        tb <-  load(files[i])
+        tem <- data.frame(file=files[i], mu=d[1], nu=d[2], s=d[3])
+        out <- rbind(out, tem)
+        #out$context <- gsub("_.*", "", out$id)
+        #out$q <- gsub(".*_", "", out$id)
+        if(doplot){
+            #mplot(res, burnin=0.1, rates=c(1E8,1E8,1E8), doplot=TRUE)
+            sfsplot(res, burnin = 0.2, rates = c(1e+08, 1e+08, 1e+08), sfsplot = "plotmean", Ne = 150000, k = 0:40)
+        }
+    }
+
+    out$nes <- 150000*out$s
+    
+    return(out)
+
+}
+```
+
+
+
+## Exon Up and Down
+
+```{r}
+pdf("graphs/genome_wide_fea_postsfs.pdf", height=5, width=5)
+out1 <- get_post_rd(path="largedata/lcache", pattern="row.*.RData", doplot=FALSE)
+dev.off()
+
+df <- read.csv("largedata/mcmc_scan_input_exon_updown80.csv")
+out1 <- merge(df, out1, by.y="file", by.x="outRD")
+
+write.table(out1, "cache/mcmc_exon_dis.csv", sep=",", row.names=FALSE, quote=FALSE)
+```
+
+

@@ -1,0 +1,166 @@
+---
+author: "Jinliang Yang"
+title: "Post MCMCBC result collection"
+date: 10-10-2017
+output: html_notebook
+---
+
+## Setup using huskeR
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+knitr::opts_knit$set(root.dir=normalizePath('../../')) 
+#library(tidyverse)
+library(ggplot2)
+library(cowplot)
+```
+
+## Major function that will be used
+
+
+
+```{r}
+
+plotfun <- function(myout){
+    fsize=16
+    p1 <- ggplot(myout, aes(x=factor(feature), y= -log10(mu), color=gset)) + 
+        geom_point(stat = "identity", size=5) +
+        facet_wrap(~ context) + 
+        scale_color_manual(values=c('#999999','#E69F00')) +
+        #guides(fill=TRUE) +
+        ylim(c(5.5, 6.2)) +
+        xlab("") +
+        ylab("-log10(mu)") +
+        ggtitle("") + theme_bw() +
+        labs(color="Cutoff") +
+        theme(axis.text = element_text(angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    
+    p2 <- ggplot(myout, aes(x=factor(feature), y= -log10(nu), color=gset)) + 
+        geom_point(stat = "identity", size=5) +
+        facet_wrap(~ context) + 
+        scale_color_manual(values=c('#999999','#E69F00')) +
+        #guides(fill=TRUE) +
+        ylim(c(5.5, 6.2)) +
+        xlab("") +
+        ylab("-log10(nu)") +
+        ggtitle("") + theme_bw() +
+        labs(color="Cutoff") +
+        theme(axis.text = element_text(angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    
+    p3 <- ggplot(myout, aes(x=factor(feature), y= nes, fill=gset)) + 
+        geom_bar(stat="identity", color="black", position=position_dodge()) +
+        facet_wrap(~ context) + 
+        scale_fill_manual(values=c('#999999','#E69F00')) +
+        #guides(fill=TRUE) +
+        #ylim(c(-7, -5)) +
+        xlab("") +
+        ylab("Ne*s") +
+        ggtitle("") + theme_bw() +
+        labs(fill="Cutoff") +
+        theme(axis.text = element_text(angle = 0, size=fsize),
+              axis.title=element_text(size=fsize, face="bold"),
+              legend.title = element_text(size=fsize, face="bold"),
+              legend.text = element_text(size=fsize))
+    outplot <- plot_grid(p1, p2, p3, ncol=1, align="v", labels =c("A", "B", "C"), label_size = 24)
+}
+
+    
+
+```
+
+```{r}
+out <- read.csv("cache/mcmc_genic_fs_rpkm_updown.csv")
+out$context <- gsub(".csv|.*_", "", out$comet_file)
+
+# -0.340779507155726  0.679169242806791   1.17266506283193 
+
+# highly expressed genes
+myout <- subset(out, cutoff > 1)
+pdf("graphs/Fig_genic_updown_rpkm_q1.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+
+# meanly expressed genes
+myout <- subset(out, cutoff > 0 & cutoff < 1)
+pdf("graphs/Fig_genic_updown_rpkm_median.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+
+# lowly expressed genes
+myout <- subset(out, cutoff < 0)
+pdf("graphs/Fig_genic_updown_rpkm_q3.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+```
+```{r}
+geneset <- read.csv("cache/geneset_rnaseq.csv")
+geneset$value <- log10(geneset$m)
+
+
+# -0.340779507155726  0.679169242806791   1.17266506283193 
+# -0.340779507155726  0.679169242806791   1.17266506283193 
+geneset$Cutoff <- "above"
+geneset[geneset$value < 1.172, ]$Cutoff <- "below"
+
+p1 <- ggplot(geneset, aes(x=value, fill=Cutoff)) + 
+        geom_histogram(bins=50) +
+        scale_fill_manual(values=c('#999999','#E69F00'))
+
+        
+
+geneset$Cutoff <- "above"
+geneset[geneset$value < 0.679169242806791, ]$Cutoff <- "below"
+
+p2 <- ggplot(geneset, aes(x=value, fill=Cutoff)) + 
+        geom_histogram(bins=50) +
+        scale_fill_manual(values=c('#999999','#E69F00'))
+        
+
+geneset$Cutoff <- "above"
+geneset[geneset$value < -0.34, ]$Cutoff <- "below"
+
+p3 <- ggplot(geneset, aes(x=value, fill=Cutoff)) + 
+        geom_histogram(bins=50) +
+        scale_fill_manual(values=c('#999999','#E69F00'))
+        
+```
+
+-----------------------------
+
+cache/mcmc_genic_fs_rpkm_updown_extreme.csv
+
+```{r}
+out <- read.csv("cache/mcmc_genic_fs_rpkm_updown_extreme.csv")
+out$context <- gsub(".csv|.*_", "", out$comet_file)
+
+# -0.340779507155726  0.679169242806791   1.17266506283193 
+
+# highly expressed genes
+myout <- subset(out, cutoff > 0)
+pdf("graphs/Fig_genic_updown_rpkm_q90.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+
+# meanly expressed genes
+myout <- subset(out, cutoff < 0)
+pdf("graphs/Fig_genic_updown_rpkm_q10.pdf", height=10, width=8)
+tplot <- plotfun(myout)
+tplot
+dev.off()
+
+```
+
