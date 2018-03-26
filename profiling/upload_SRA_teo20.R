@@ -25,3 +25,4 @@ set_farm_job(slurmsh = "slurm-script/upload_sra.sh",
 # rsync -alPvz farm:/group/jrigrp4/VCF_JRIAL2_20samples/ .
 # irsync -rKV VCF_JRIAL2_20samples/ i:/iplant/home/yangjl/
 # irsync -rKV i:/iplant/home/yangjl/teo20_VCF_AGPv4 /lustre/work/jyanglab/jyang21/hugedata/teo20_VCF_AGPv4
+# QD < 2.0 || FS > 60.0 || MQ < 40.0 || MQRankSum < -12.5 || ReadPosRankSum < -8.0
