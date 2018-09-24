@@ -27,3 +27,20 @@ run_bismark(inputdf[-1,], genome = NULL,
             N = 1, align = TRUE,
             email = "yangjl0930@gmail.com", runinfo = c(TRUE, "bigmemm", 16))
 
+
+#########------------------
+
+# module load bismark/0.19
+
+library("huskeR")
+genome <- "/common/jyanglab/gxu6/B73_v4"
+
+fq1 <- list.files(path="/lustre/work/jyanglab/gxu6/msfs_teo/WGBS/cache/mapping/teo/test1/", pattern="R1.test.fastq.gz$", full.names = TRUE)
+fq2 <- list.files(path="/lustre/work/jyanglab/gxu6/msfs_teo/WGBS/cache/mapping/teo/test1/", pattern="R2.test.fastq.gz$", full.names = TRUE)
+
+inputdf <- data.frame(fq1 = fq1,  fq2 = fq2, outbase = "/common/jyanglab/jyang21/projects/msfs_teo/largedata", out2=gsub(".*/|_.*", "", fq2))
+inputdf$genome <- genome
+
+run_bismark(inputdf, genome = NULL,
+            outdir = "/common/jyanglab/jyang21/projects/msfs_teo/largedata", N = 1, align = TRUE,
+            email = "yangjl0930@gmail.com", runinfo = c(TRUE, "jclarke", 4, "10G", "8:00:00"))
